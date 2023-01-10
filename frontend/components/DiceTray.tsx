@@ -5,10 +5,10 @@ interface IDiceTray {
   currentDice: number[];
   shouldRerollDice: boolean[];
   toggleDiceReroll: (value: number) => void;
+  canReroll: boolean;
 }
 
-const DiceTray: FC<IDiceTray> = ({currentDice, shouldRerollDice, toggleDiceReroll}) => {
-
+const DiceTray: FC<IDiceTray> = ({currentDice, shouldRerollDice, toggleDiceReroll, canReroll}) => {
   return (
     <div className='flex flex-row space-x-4'>
       {
@@ -17,6 +17,7 @@ const DiceTray: FC<IDiceTray> = ({currentDice, shouldRerollDice, toggleDiceRerol
             onClick={() => toggleDiceReroll(diceNum)}
             current={currentDice[diceNum]}
             shouldReroll={shouldRerollDice[diceNum]}
+            isDisabled={!canReroll}
           />
         ))
       }
