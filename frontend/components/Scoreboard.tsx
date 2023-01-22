@@ -1,96 +1,172 @@
-import React, { useState } from 'react'
+import React, { useState, FC, useEffect, Dispatch, SetStateAction, useContext } from 'react'
+import { ILowerSection, IUpperSection } from '../pages/game';
+import { initialScore } from '../hooks/useGameMeta';
 
-interface IUpperSection {
-  scores: IUpperSectionScores;
-  receivesBonus: boolean;
+interface IScoreboard {
+  currentDice: number[];
+  canSelectScores: boolean;
 }
 
-interface IUpperSectionScores {
-  [key: number]: number | undefined;
-}
-
-interface ILowerSection {
-  scores: IUpperSectionScores;
-  yahtzeeBonuses: number | undefined;
-}
-
-interface ILowerSectionScores {
-  [key: string]: number | undefined;
-}
-
-const Scoreboard = () => {
-  const upperSectionScores = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
-  ];
-
-  const upperSectionDict: IUpperSectionScores = Object.assign(
-    {}, ...upperSectionScores.map(x => (
-      {[x]: undefined})
-    )
-  );
-
-  const lowerSectionScores = [
-    "3 of a kind",
-    "4 of a kind",
-    "Full House",
-    "Small Straight",
-    "Large Straight",
-    "Yahtzee!",
-    "Chance"
-  ]
-
-  const lowerSectionDict: ILowerSectionScores = Object.assign(
-    {}, ...lowerSectionScores.map(x => (
-      {[x]: undefined})
-    )
-  );
-
-  const [upperSection, setUpperSection] = useState<IUpperSection>({
-    scores: upperSectionDict,
-    receivesBonus: false,
-  });
-
-  const [lowerSection, setLowerSection] = useState<ILowerSection>({
-    scores: lowerSectionDict, 
-    yahtzeeBonuses: undefined
-  });
-
-  const UpperScoreboard = () => (
-    <div>
-      {
-        Object.entries(upperSection.scores).map(([key, value]) => (
-          <div className='flex flex-row'>
-            <div>{key}</div>
-            <div>{value ?? " —"}</div>
-          </div>
-        ))
+const ScoreBox: FC<{
+  title: string | number, 
+  value: number | undefined, 
+  canSelectScores: boolean
+  onClick: () => void
+}> = ({title, value, canSelectScores, onClick}) => (
+  <div className='relative grid items-center justify-center w-full grid-cols-3 p-2 bg-gray-100 border border-black border-solid '>
+    <h5 className='text-3xl text-black'>{title}</h5>
+    <p className=''>{'Insert info about rules here'}</p>
+    <button 
+      className={'text-sm text-black border-solid w-full h-full border-4 ' + 
+        `${value !== undefined ? 'border-green-400' : 'border-red-400'} ` + 
+        `${canSelectScores ? 'bg-white' : 'bg-gray-600'}`
       }
-    </div>
-  )
+      onClick={onClick}
+    >
+      {value ?? "—"}
+    </button>
+  </div>
+)
 
-  const LowerScoreboard = () => (
-    <div>
-      {
-        Object.entries(lowerSection.scores).map(([key, value]) => (
-          <div className='flex flex-row'>
-            <div>{key}</div>
-            <div>{value ?? " —"}</div>
-          </div>
-        ))
+const ScoreBoardSection: FC<{children?: React.ReactNode}> = ({children}) => (
+  <section className='flex flex-col items-center justify-center w-full p-2'>{children}</section>
+)
+
+// const upperSecScores = Object.values(initialScore.upper); 
+// const lowerSecScores = Object.values(initialScore.lower);
+
+const Scoreboard: FC<IScoreboard> = ({
+  currentDice,
+  canSelectScores, 
+}) => {
+  const {gameMeta, dispatchGameMeta} = useContext(GameContext);
+
+  function calculateScore(type: string | number) {
+    // For UpperSection, only reward the scores if 
+    // three (or more) of a kind are rolled 
+    if (typeof type === 'number') {
+      let diceCount = 0;
+      const count = currentDice.reduce(
+        (accumulator, currentValue) => {
+          if (currentValue !== type) return accumulator
+          else {
+            diceCount += 1 
+            return accumulator + type
+          }
+      }, 0);
+      if (diceCount < 3) return;
+      // setScore((prevScore) => prevScore + count)
+    } else { // Lower section
+      const counts: {[count: number]: number} = {};
+      currentDice.forEach((val) => counts[val] = counts[val] + 1 || 1)
+
+      switch (type) {
+        case "3 of a kind": {
+          const hasMatch = Object.values(counts).find((ele: number) => ele === 3);
+          if (!hasMatch) return 0;
+          return currentDice.reduce((sum, cur) => sum + cur);
+        }
+        case "4 of a kind": {
+          const hasMatch = Object.values(counts).find((ele: number) => ele === 4)
+          if (!hasMatch) return 0;
+          return currentDice.reduce((sum, cur) => sum + cur);
+        }
+        case "Full House": {
+          const hasTwoMatch = Object.values(counts).find((ele: number) => ele === 2); 
+          const hasThreeMatch = Object.values(counts).find((ele: number) => ele === 3); 
+          const hasFullHouse = hasTwoMatch && hasThreeMatch;
+          return hasFullHouse ? 25 : 0;
+        }
+        case "Small Straight": {
+          const dicePresent = [...Object.keys(counts)];
+          let numSequential = 0;
+          let largestSequence = 0;
+
+          dicePresent.sort();
+          for (let i=0; i<dicePresent.length; ++i) {
+            const isSequential = (dicePresent[i-1] + 1) === dicePresent[i];
+            if (isSequential) {
+              numSequential += 1
+            } else {
+              largestSequence = numSequential;
+              numSequential = 0
+            }
+          }
+          return largestSequence === 4 ? 30 : 0;
+        }
+        case "Large Straight": {
+          const dicePresent = [...Object.keys(counts)];
+
+          dicePresent.sort();
+          for (let i=0; i<dicePresent.length; ++i) {
+            const isSequential = (dicePresent[i-1] + 1) === dicePresent[i];
+            if (!isSequential) return 0
+          }
+          return 40;
+        }
+        case "Yahtzee!": {
+          const hasMatch = currentDice.every((currentValue) => currentValue === currentDice[0]);
+          return hasMatch ? 50 : 0;
+        }
+        default: { // Chance
+          const chanceSum = currentDice.reduce(
+            (accumulator, currentValue) => accumulator + currentValue
+          , 0)
+          return chanceSum;
+        }
       }
-    </div>
-  )
-  
+    }
+  }
 
   return (
-    <section className='w-full h-full bg-gray-300 rounded-lg'>
-      <UpperScoreboard />
-      <LowerScoreboard />
+    <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
+      <header className="flex flex-col items-center justify-start w-full p-4">
+        <h3 className='text-3xl'>Scoreboard</h3>
+        <section className='flex justify-between w-full'>
+          <span className='flex flex-col items-center justify-center'>
+            <h5>Current Score: </h5>{0}
+          </span>
+          <span className='flex flex-col items-center justify-center'>
+            <h5>Top Score: </h5>{0}
+          </span>
+        </section>
+      </header>
+      {/* Upper  */}
+      <ScoreBoardSection>
+        <h2 className='uppercase'>Upper Section</h2>
+        {
+          Object.entries(gameMeta.upper).map(
+            ([key, value]) => (
+              <ScoreBox title={key} value={value} canSelectScores={canSelectScores}
+                onClick={() => {
+                  dispatchGameMeta({
+                    type: 'UPPER_SCORE', 
+                    value: calculateScore(value)
+                  })
+                }}
+              />
+            )
+          )
+        }
+      </ScoreBoardSection>
+      {/* Lower */}
+      <ScoreBoardSection>
+        <h2 className='uppercase'>Lower Section</h2>
+        {
+          Object.entries(gameMeta.lower).map(
+            ([key, value]) => (
+              <ScoreBox title={key} value={value} canSelectScores={canSelectScores}
+                onClick={() => {
+                  dispatchGameMeta({
+                    type: 'LOWER_SCORE', 
+                    value: calculateScore(value)
+                  })
+                }}
+              />
+            )
+          )
+        }
+      </ScoreBoardSection>
     </section>
   )
 }
