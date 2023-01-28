@@ -140,10 +140,17 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
     (diceObj) => counts[diceObj.face] = counts[diceObj.face] + 1 || 1
   )
 
+  const equals = (a: number[], b: number[]) => (
+    a.length === b.length &&
+    a.every(
+      (val, index) => val === b[index]
+    )
+  );
+
   switch (type) {
     case "3 of a kind": {
       const hasMatch = Object.values(counts).find(
-        (ele: number) => ele === 3
+        (ele: number) => ele >= 3
       );
       if (!hasMatch) return 0;
 
@@ -155,7 +162,9 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
       return calculatedScore;
     }
     case "4 of a kind": {
-      const hasMatch = Object.values(counts).find((ele: number) => ele === 4)
+      const hasMatch = Object.values(counts).find(
+        (ele: number) => ele >= 4
+      )
       if (!hasMatch) return 0;
 
       let calculatedScore = 0;
@@ -177,36 +186,40 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
       return hasFullHouse ? 25 : 0;
     }
     case "Small Straight": {
-      const dicePresent = [ ...Object.keys(counts) ];
-      let numSequential = 0;
-      let largestSequence = 0;
-
+      // check whether there are 4 sequential numbers in the counts object
+      const countKeys = [ ...Object.keys(counts) ];
+      const dicePresent = countKeys.map(
+        (key) => parseInt(key)
+      );
       dicePresent.sort();
-      for (let i=0; i<dicePresent.length; ++i) {
-        const isSequential = (dicePresent[i-1] + 1) === dicePresent[i];
-        if (isSequential) {
-          numSequential += 1
-        } else {
-          largestSequence = numSequential;
-          numSequential = 0
-        }
-      }
-      return largestSequence === 4 ? 30 : 0;
+
+      const isSmallStraight = (
+        equals(dicePresent, [1, 2, 3, 4])
+        || equals(dicePresent, [2, 3, 4, 5])
+        || equals(dicePresent, [3, 4, 5, 6])
+        || equals(dicePresent, [1, 2, 3, 4, 5]) 
+        || equals(dicePresent, [2, 3, 4, 5, 6])
+      ) 
+
+      return isSmallStraight ? 30 : 0;
     }
     case "Large Straight": {
-      const dicePresent = [ ...Object.keys(counts) ];
-
+      const countKeys = [ ...Object.keys(counts) ];
+      const dicePresent = countKeys.map(
+        (key) => parseInt(key)
+      );
       dicePresent.sort();
-      for (let i=0; i<dicePresent.length; ++i) {
-        const isSequential = (dicePresent[i-1] + 1) === dicePresent[i];
-        if (!isSequential) return 0
-      }
 
-      return 40;
+      const isLargeStraight = (
+        equals(dicePresent, [1, 2, 3, 4, 5]) 
+        || equals(dicePresent, [2, 3, 4, 5, 6])
+      )
+
+      return isLargeStraight ? 40 : 0;
     }
     case "Yahtzee!": {
-      const hasMatch = currentDice.every(
-        (currentValue) => currentValue.face === currentDice[0].face
+      const hasMatch = Object.values(counts).find(
+        (ele: number) => ele === 5
       );
 
       return hasMatch ? 50 : 0;
@@ -220,7 +233,6 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
       return calculatedScore;
     }
   }
-
 }
 
 export {
