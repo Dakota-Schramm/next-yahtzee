@@ -73,55 +73,59 @@ interface IScoreboard {
   lower: ILowerSection;
 }
 
-const Scoreboard: FC<IScoreboard> = ({
-  currentDice,
-  canSelectScores, 
-}) => {
-  const {gameMeta, dispatchGameMeta} = useContext(GameContext);
-
-  return (
-    <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
-      <header className="flex flex-col items-center justify-start w-full p-4">
-        <h3 className='text-3xl'>Scoreboard</h3>
-        <section className='flex justify-between w-full'>
-          <span className='flex flex-col items-center justify-center'>
-            <h5>Current Score: </h5>{0}
-          </span>
-          <span className='flex flex-col items-center justify-center'>
-            <h5>Top Score: </h5>{0}
-          </span>
-        </section>
-      </header>
-      {/* Upper  */}
-      <ScoreBoardSection
-        title='Upper Section'
-        name_list={gameMeta.upper}
-        can_select_scores={canSelectScores}
-        currentDice={currentDice}
-        onClick={() => {
-          dispatchGameMeta({
-            type: 'UPPER_SCORE', 
-            value: calculateScore(currentDice, value)
-          })
-        }}
-      />
-      {/* Lower */}
-      <ScoreBoardSection
-        title='Lower Section'
-        name_list={gameMeta.lower}
-        can_select_scores={canSelectScores}
-        currentDice={currentDice}
-        onClick={() => {
-          dispatchGameMeta({
-            type: 'LOWER_SCORE', 
-            value: calculateScore(currentDice, value)
-          })
-        }}
-      
-      />
-    </section>
-  )
+interface IScoreboard {
+  currentDice: number[];
+  canSelectScores: boolean;
+  gameTurn: number;
+  addScore: (type: string, column: number | string, value: number) => void;
+  upper: IUpperSection;
+  lower: ILowerSection;
 }
+
+const Scoreboard = (
+  { currentDice, canSelectScores }: IScoreboard
+) => (
+  <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
+    <header className="flex flex-col items-center justify-start w-full p-4">
+      <h3 className='text-3xl'>Scoreboard</h3>
+      <section className='flex justify-between w-full'>
+        <span className='flex flex-col items-center justify-center'>
+          <h5>Current Score: </h5>{0}
+        </span>
+        <span className='flex flex-col items-center justify-center'>
+          <h5>Top Score: </h5>{0}
+        </span>
+      </section>
+    </header>
+    {/* Upper  */}
+    <ScoreBoardSection
+      title='Upper Section'
+      name_list={gameMeta.upper}
+      can_select_scores={canSelectScores}
+      currentDice={currentDice}
+      onClick={() => {
+        dispatchGameMeta({
+          type: 'UPPER_SCORE', 
+          value: calculateScore(currentDice, value)
+        })
+      }}
+    />
+    {/* Lower */}
+    <ScoreBoardSection
+      title='Lower Section'
+      name_list={gameMeta.lower}
+      can_select_scores={canSelectScores}
+      currentDice={currentDice}
+      onClick={() => {
+        dispatchGameMeta({
+          type: 'LOWER_SCORE', 
+          value: calculateScore(currentDice, value)
+        })
+      }}
+      
+    />
+  </section>
+)
 
 function calculateScore(currentDice: ICurrentDie[], type: string | number) {
   // For UpperSection, only reward the scores if 
