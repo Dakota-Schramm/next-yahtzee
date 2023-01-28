@@ -1,6 +1,7 @@
 import { useState, useReducer, useEffect } from "react";
 
 import { upperSectionScores, lowerSectionScores } from '../constants';
+import { ICurrentDie } from "../components/DiceTray";
 
 export interface IUpperSection {
   [key: number]: number | undefined;
@@ -11,30 +12,43 @@ export interface ILowerSection {
 }
 
 const upperSectionDict: IUpperSection = Object.assign(
-  {}, ...upperSectionScores.map(x => (
-    {[x]: undefined})
+  {}, ...upperSectionScores.map(
+    x => ({ [x]: undefined })
   )
 );
 
 const lowerSectionDict: ILowerSection = Object.assign(
-  {}, ...lowerSectionScores.map(x => (
-    {[x]: undefined})
+  {}, ...lowerSectionScores.map(
+    x => ({ [x]: undefined })
   )
 );
 
 interface IScoreMeta {
+  // Upper Section
   upper: IUpperSection;
-  lower: ILowerSection;
-  total: number;
   receivesUpperBonus: boolean;
+
+  // Lower Section
+  lower: ILowerSection;
   yahtzeeBonuses: number | null;
+
+  total: number;
 }
 
-export interface IGameMeta {
+export interface IGameMeta extends IScoreMeta {
   footerButtonId: number;
   turn: number;
+  currentDice: ICurrentDie[];
 }
 
+interface GameAction {
+  column?: string | number;
+  value?: number;
+  type: string;
+  shouldReroll?: boolean[];
+}
+
+const numOfDice = 5;
 
 export default function useGameMeta() {
   // Game Meta Info
@@ -43,22 +57,59 @@ export default function useGameMeta() {
   return [game, gameDispatch]
 }
 
-function gameReducer(gameState, action){
+function rerollDice(currentDice: ICurrentDie[], shouldRerollOverride?: boolean[]) {
+  const newDice = currentDice.map(
+    (prevRoll, idx) => {
+      const shouldReroll = shouldRerollOverride ? shouldRerollOverride[idx] : prevRoll.shouldReroll;
+      if (!shouldReroll) return { ...prevRoll };
+
+      const newRoll = Math.floor(Math.random() * 6 + 1);
+
+      return ({ face: newRoll, shouldReroll: true  });
+  })
+
+  return newDice
+}
+
+function gameReducer(gameState: IGameMeta, action: GameAction){
+  const rerollAll = [ ...Array(numOfDice) ].map((_) => true);
+
+  const rerollOnFirstTurn = {
+    turn: 1,
+    currentDice: rerollDice(gameState.currentDice, rerollAll)
+  }
+
   switch (action.type) {
     case 'START': {
       return ({
         ...gameState,
         footerButtonId: 1,
-        turn: 1
+        ...rerollOnFirstTurn
       })
     }
     case 'REROLL': {
       let footerState = gameState.footerButtonId;
       if (gameState.turn === 3) footerState = 2
+
       return ({
         ...gameState, 
         footerButtonId: footerState,
-        turn: gameState.turn + 1
+        turn: gameState.turn + 1,
+        currentDice: rerollDice(gameState.currentDice)
+      })
+    }
+    case 'TOGGLE_REROLL': {
+      const diceWithRerollPreferenceChanged = gameState.currentDice.map(
+        (prevChoice, idx) => {
+          const newChoice = { ...prevChoice, shouldReroll: action.shouldReroll[idx] };
+
+          return newChoice;
+        }
+      )
+
+      return ({
+        ...gameState,
+        currentDice: diceWithRerollPreferenceChanged
       })
     }
     case 'UPPER_SCORE': {
@@ -71,7 +122,7 @@ function gameReducer(gameState, action){
         ...gameState,
         upper: newScore,
         total: gameState.total + action.value,
-        turn: 1      
+        ...rerollOnFirstTurn
       })
     }
     case 'LOWER_SCORE': {
@@ -84,7 +135,7 @@ function gameReducer(gameState, action){
         ...gameState,
         lower: newScore,
         total: gameState.total + action.value,
-        turn: 1       
+        ...rerollOnFirstTurn
       })
     }
     case 'YAHTZEE': {
@@ -92,20 +143,21 @@ function gameReducer(gameState, action){
         ...gameState,
         yahtzeeBonuses: gameState.yahtzeeBonuses + 1 ?? 0,
         total: gameState.total + (gameState.yahtzeeBonuses > 0 ? 100 : 50),
+        ...rerollOnFirstTurn
       })
     }
     case 'NEXT_ROUND': {
       return ({
         ...gameState, 
-        turn: 1,
-        footerButtonId: 1
+        footerButtonId: 1,
+        ...rerollOnFirstTurn
       })
     }
     case 'RESTART' || 'PLAY_AGAIN': {
       return ({
         ...initialScore,
-        turn: 1,
-        footerButtonId: 1
+        footerButtonId: 1,
+        ...rerollOnFirstTurn
       })
     }
     default: throw Error('Unknown action: ' + action.type)
@@ -123,5 +175,6 @@ export const initialScore: IScoreMeta = {
 export const initialGame: IGameMeta = {
   ...initialScore,
   turn: 0,
-  footerButtonId: 0
+  footerButtonId: 0,
+  currentDice: [ ...Array(numOfDice) ].map((_) => ({ face: 1, shouldReroll: true }) ),
 }

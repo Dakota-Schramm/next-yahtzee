@@ -3,33 +3,17 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useState, FC, useLayoutEffect, useReducer, useContext } from 'react';
 
+import { upperSectionScores, lowerSectionScores } from '../constants';
+
 import Scoreboard from '../components/Scoreboard';
 import DiceTray, { ICurrentDie } from '../components/DiceTray';
-import { upperSectionScores, lowerSectionScores } from '../constants';
-import GameProvider, { GameContext } from '../contexts/Game';
+import FooterButtons from '../components/Footer';
+
 import useGameMeta from '../hooks/useGameMeta';
 
 const Game: NextPage = () => {
   // Game Meta Info
   const [gameMeta, dispatchGameMeta] = useGameMeta();
-
-  // Dice Info
-  const numOfDice = 5;
-  const [currentDice, setCurrentDice] = useState<number[]>(Array(numOfDice).fill(1))
-  const [diceShouldReroll, setDiceShouldReroll] = useState<boolean[]>(Array(numOfDice).fill(true))
-  
-  function rerollDice() {
-    currentDice.forEach((_, idx) => {
-      if (!diceShouldReroll[idx]) return;
-      const newRoll = Math.floor(Math.random() * 6 + 1)
-      setCurrentDice((prevDice) => (
-        prevDice.map((k, i) => i !== idx
-          ? k
-          : newRoll
-        )
-      ))
-    })
-  }
 
   function handleStart() { 
     dispatchGameMeta({
@@ -40,6 +24,19 @@ const Game: NextPage = () => {
   function handleReroll() {
     dispatchGameMeta({
       type: "REROLL"
+    })
+  }
+
+  function handleToggle(diceToToggle: number) {
+    const currentDicePrefs: boolean[] = gameMeta.currentDice.map(
+      (_: unknown, idx: number) => diceToToggle === idx 
+        ? !_.shouldReroll
+        : _.shouldReroll
+    );
+
+    dispatchGameMeta({
+      type: "TOGGLE_REROLL",
+      shouldReroll: currentDicePrefs     
     })
   }
 
@@ -55,9 +52,23 @@ const Game: NextPage = () => {
     })
   }
 
-  const canReroll = gameMeta.turn !== 3;
+  function handleAddUpperScore(type: number, value: number) {
+    dispatchGameMeta({
+      type: "UPPER_SCORE",
+      column: type,
+      value
+    })
+  }
 
-  useEffect(() => rerollDice(), [])
+  function handleAddLowerScore(type: string, value: number) {
+    dispatchGameMeta({
+      type: "LOWER_SCORE",
+      column: type,
+      value
+    })
+  }
+
+  const canReroll = gameMeta.turn !== 3;
 
   return (
     // Have main screen that lets you navigate to scores, exit and play
@@ -69,16 +80,9 @@ const Game: NextPage = () => {
         {
           gameMeta.turn !== 0 && (
             <DiceTray 
-              currentDice={currentDice} 
+              currentDice={gameMeta.currentDice} 
               canReroll={canReroll}
-              shouldRerollDice={diceShouldReroll}
-              toggleDiceReroll={
-                (diceNum) => setDiceShouldReroll((prevDice) => (
-                  prevDice.map((k, i) => i !== diceNum 
-                    ? k 
-                    : !k
-                  )
-              ))} 
+              toggleDiceReroll={handleToggle} 
             />
           )
         }
@@ -93,8 +97,12 @@ const Game: NextPage = () => {
         </footer>
       </section>
       <Scoreboard 
-        currentDice={currentDice}
+        currentDice={gameMeta.currentDice}
         canSelectScores={!canReroll}
+        upper={gameMeta.upper}
+        lower={gameMeta.lower}
+        handleAddUpperScore={handleAddUpperScore}
+        handleAddLowerScore={handleAddLowerScore}
       />
     </section>
   )

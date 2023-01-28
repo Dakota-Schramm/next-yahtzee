@@ -1,6 +1,6 @@
 import React, { useState, FC } from 'react'
 
-interface ICurrentDie {
+export interface ICurrentDie {
   face: number; 
   shouldReroll: boolean;
 }
@@ -11,7 +11,6 @@ interface IDiceButton extends ICurrentDie {
 }
 
 interface IDiceTray {
-  gameTurn: number;
   currentDice: ICurrentDie[];
   toggleDiceReroll: (value: number) => void;
   canReroll: boolean;
@@ -33,17 +32,23 @@ const Die = (
   </button>
 );
 
-const DiceTray: FC<IDiceTray> = ({gameTurn, currentDice, toggleDiceReroll, canReroll}) => (
+const DiceTray = (
+  {currentDice, toggleDiceReroll, canReroll}: IDiceTray
+) => (
   <div className='flex flex-row space-x-4'>
     {
-      currentDice.map((diceObj, diceNum) => (
-        <Die 
-          onClick={() => toggleDiceReroll(diceNum)}
-          face={diceObj.face}
-          shouldReroll={diceObj.shouldReroll}
-          isDisabled={gameTurn === 3 || !canReroll}
-        />
-      ))
+      currentDice.map(
+        (diceObj, diceNum) => (
+          <Die 
+            onClick={() => {
+              toggleDiceReroll(diceNum)
+            }}
+            face={diceObj.face}
+            shouldReroll={diceObj.shouldReroll}
+            isDisabled={!canReroll}
+          />
+        )
+      )
     }
   </div>
 );
