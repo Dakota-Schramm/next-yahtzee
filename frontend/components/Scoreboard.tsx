@@ -37,61 +37,91 @@ const ScoreBox = (
   </div>
 )
 
-const ScoreBoardSection: FC<{children?: React.ReactNode}> = ({children}) => (
-  <section className='flex flex-col items-center justify-center w-full p-2'>{children}</section>
-)
+interface IScoreboardSection {
+  title: string,
+  name_list: string[],
+  canSelectScores: boolean,
+  onClick: () => void,
+}
 
-// const upperSecScores = Object.values(initialScore.upper); 
-// const lowerSecScores = Object.values(initialScore.lower);
-
-const Scoreboard = (
-  { currentDice, canSelectScores, handleAddUpperScore, handleAddLowerScore, upper, lower }: IScoreboard
+const ScoreBoardSection = (
+  {title, name_list, canSelectScores, onClick}: IScoreboardSection
 ) => (
-  <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
-    <header className="flex flex-col items-center justify-start w-full p-4">
-      <h3 className='text-3xl'>Scoreboard</h3>
-      <section className='flex justify-between w-full'>
-        <span className='flex flex-col items-center justify-center'>
-          <h5>Current Score: </h5>{0}
-        </span>
-        <span className='flex flex-col items-center justify-center'>
-          <h5>Top Score: </h5>{0}
-        </span>
-      </section>
-    </header>
-    {/* Upper  */}
-    <ScoreBoardSection>
-      <h2 className='uppercase'>Upper Section</h2>
-      {
-        Object.entries(upper).map(
-          ([key, value]) => (
-            <ScoreBox title={key} value={value} canSelectScores={canSelectScores}
-              onClick={() => {
-                handleAddUpperScore(key, calculateScore(currentDice, key) )
-              }}
-            />
-          )
+  <section className='flex flex-col items-center justify-center w-full p-2'>
+    <h2 className='uppercase'>{title}</h2>
+    {
+      Object.entries(name_list).map(
+        ([key, value]) => (
+          <ScoreBox 
+            title={key} 
+            value={value} 
+            canSelectScores={canSelectScores}
+            onClick={onClick}
+          />
         )
-      }
-    </ScoreBoardSection>
-    {/* Lower */}
-    <ScoreBoardSection>
-      <h2 className='uppercase'>Lower Section</h2>
-      {
-        Object.entries(lower).map(
-          ([key, value]) => (
-            <ScoreBox title={key} value={value} canSelectScores={canSelectScores}
-              onClick={() => {
-                handleAddLowerScore(key, calculateScore(currentDice, key) )
-              }}
-            />
-          )
-        )
-      }
-    </ScoreBoardSection>
+      )
+    }
   </section>
 )
 
+interface IScoreboard {
+  currentDice: number[];
+  canSelectScores: boolean;
+  gameTurn: number;
+  addScore: (type: string, column: number | string, value: number) => void;
+  upper: IUpperSection;
+  lower: ILowerSection;
+}
+
+const Scoreboard: FC<IScoreboard> = ({
+  currentDice,
+  canSelectScores, 
+}) => {
+  const {gameMeta, dispatchGameMeta} = useContext(GameContext);
+
+  return (
+    <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
+      <header className="flex flex-col items-center justify-start w-full p-4">
+        <h3 className='text-3xl'>Scoreboard</h3>
+        <section className='flex justify-between w-full'>
+          <span className='flex flex-col items-center justify-center'>
+            <h5>Current Score: </h5>{0}
+          </span>
+          <span className='flex flex-col items-center justify-center'>
+            <h5>Top Score: </h5>{0}
+          </span>
+        </section>
+      </header>
+      {/* Upper  */}
+      <ScoreBoardSection
+        title='Upper Section'
+        name_list={gameMeta.upper}
+        can_select_scores={canSelectScores}
+        currentDice={currentDice}
+        onClick={() => {
+          dispatchGameMeta({
+            type: 'UPPER_SCORE', 
+            value: calculateScore(currentDice, value)
+          })
+        }}
+      />
+      {/* Lower */}
+      <ScoreBoardSection
+        title='Lower Section'
+        name_list={gameMeta.lower}
+        can_select_scores={canSelectScores}
+        currentDice={currentDice}
+        onClick={() => {
+          dispatchGameMeta({
+            type: 'LOWER_SCORE', 
+            value: calculateScore(currentDice, value)
+          })
+        }}
+      
+      />
+    </section>
+  )
+}
 
 function calculateScore(currentDice: ICurrentDie[], type: string | number) {
   // For UpperSection, only reward the scores if 
