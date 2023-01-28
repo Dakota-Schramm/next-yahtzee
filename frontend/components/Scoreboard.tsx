@@ -131,7 +131,7 @@ function getScoreForUpperSection(currentDice: ICurrentDie[], type: number) {
       }
   }, 0);
 
-  return diceCount < 3 ? calculatedScore : 0;
+  return diceCount >= 3 ? calculatedScore : 0;
 }
 
 function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
