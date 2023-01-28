@@ -65,21 +65,14 @@ const ScoreBoardSection = (
 )
 
 interface IScoreboard {
-  currentDice: number[];
+  currentDice: ICurrentDie[];
   canSelectScores: boolean;
   gameTurn: number;
   addScore: (type: string, column: number | string, value: number) => void;
   upper: IUpperSection;
+  handleAddUpperScore: (score: IUpperSection) => void;
   lower: ILowerSection;
-}
-
-interface IScoreboard {
-  currentDice: number[];
-  canSelectScores: boolean;
-  gameTurn: number;
-  addScore: (type: string, column: number | string, value: number) => void;
-  upper: IUpperSection;
-  lower: ILowerSection;
+  handleAddLowerScore: (score: ILowerSection) => void;
 }
 
 const Scoreboard = (
@@ -103,12 +96,7 @@ const Scoreboard = (
       name_list={gameMeta.upper}
       can_select_scores={canSelectScores}
       currentDice={currentDice}
-      onClick={() => {
-        dispatchGameMeta({
-          type: 'UPPER_SCORE', 
-          value: calculateScore(currentDice, value)
-        })
-      }}
+      onClick={handleAddUpperScore}
     />
     {/* Lower */}
     <ScoreBoardSection
@@ -116,12 +104,7 @@ const Scoreboard = (
       name_list={gameMeta.lower}
       can_select_scores={canSelectScores}
       currentDice={currentDice}
-      onClick={() => {
-        dispatchGameMeta({
-          type: 'LOWER_SCORE', 
-          value: calculateScore(currentDice, value)
-        })
-      }}
+      onClick={handleAddLowerScore}
       
     />
   </section>
