@@ -223,4 +223,8 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
 
 }
 
+export {
+  calculateScore
+}
+
 export default Scoreboard
