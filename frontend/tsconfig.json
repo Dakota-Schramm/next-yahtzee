@@ -16,9 +16,9 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"]
+      "~/components/*": ["components/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "__tests__/components/Scoreboard/calculate_score.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "__tests__/**/*.ts", "__tests__/**/*.tsx"],
   "exclude": ["node_modules"]
 }

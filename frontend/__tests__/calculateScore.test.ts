@@ -1,11 +1,6 @@
-
-import React from 'react'
-import {render, screen} from '@testing-library/react'
-// import userEvent from '@testing-library/user-event'
-import '@testing-library/jest-dom'
 import {describe, expect, test} from '@jest/globals';
 
-import { calculateScore } from '~/components/Scoreboard'
+import { calculateScore } from '../components/Scoreboard'
 
 const allOnes = [ ...Array(5) ].map(
   (_) => ({ face: 1, shouldReroll: false })
