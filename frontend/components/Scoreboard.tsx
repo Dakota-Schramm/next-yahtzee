@@ -103,7 +103,8 @@ function calculateScore(currentDice: ICurrentDie[], type: string | number) {
 
 function getScoreForUpperSection(currentDice: ICurrentDie[], type: number) { 
   let diceCount = 0;
-  const count = currentDice.reduce(
+
+  const calculatedScore = currentDice.reduce(
     (accumulator, currentDiceObj) => {
       if (currentDiceObj.face !== type) return accumulator
       else {
@@ -111,10 +112,8 @@ function getScoreForUpperSection(currentDice: ICurrentDie[], type: number) {
         return accumulator + type
       }
   }, 0);
-  if (diceCount < 3) return;
 
-  return count
-  // setScore((prevScore) => prevScore + count)}
+  return diceCount < 3 ? calculatedScore : 0;
 }
 
 function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
@@ -125,32 +124,42 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
 
   switch (type) {
     case "3 of a kind": {
-      const hasMatch = Object.values(counts).find((ele: number) => ele === 3);
-      if (!hasMatch) return 0;
-      const _ = currentDice.reduce(
-        (sum, cur) => sum + cur.face
+      const hasMatch = Object.values(counts).find(
+        (ele: number) => ele === 3
       );
+      if (!hasMatch) return 0;
 
-      return _;
+      let calculatedScore = 0;
+      currentDice.forEach(
+        curDie => calculatedScore += curDie.face
+      )
+
+      return calculatedScore;
     }
     case "4 of a kind": {
       const hasMatch = Object.values(counts).find((ele: number) => ele === 4)
       if (!hasMatch) return 0;
-      const _ = currentDice.reduce(
-        (sum, cur) => sum + cur
-      );
 
-      return _;
+      let calculatedScore = 0;
+      currentDice.forEach(
+        (curDie) => calculatedScore += curDie.face
+      )
+
+      return calculatedScore;
     }
     case "Full House": {
-      const hasTwoMatch = Object.values(counts).find((ele: number) => ele === 2); 
-      const hasThreeMatch = Object.values(counts).find((ele: number) => ele === 3); 
+      const hasTwoMatch = Object.values(counts).find(
+        (ele: number) => ele === 2
+      ); 
+      const hasThreeMatch = Object.values(counts).find(
+        (ele: number) => ele === 3
+      ); 
       const hasFullHouse = hasTwoMatch && hasThreeMatch;
 
       return hasFullHouse ? 25 : 0;
     }
     case "Small Straight": {
-      const dicePresent = [...Object.keys(counts)];
+      const dicePresent = [ ...Object.keys(counts) ];
       let numSequential = 0;
       let largestSequence = 0;
 
@@ -167,7 +176,7 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
       return largestSequence === 4 ? 30 : 0;
     }
     case "Large Straight": {
-      const dicePresent = [...Object.keys(counts)];
+      const dicePresent = [ ...Object.keys(counts) ];
 
       dicePresent.sort();
       for (let i=0; i<dicePresent.length; ++i) {
@@ -178,16 +187,19 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
       return 40;
     }
     case "Yahtzee!": {
-      const hasMatch = currentDice.every((currentValue) => currentValue === currentDice[0]);
+      const hasMatch = currentDice.every(
+        (currentValue) => currentValue.face === currentDice[0].face
+      );
 
       return hasMatch ? 50 : 0;
     }
     default: { // Chance
-      const chanceSum = currentDice.reduce(
-        (accumulator, currentDiceObj) => accumulator + currentDiceObj.face
-      , 0)
+      let calculatedScore = 0;
+      currentDice.forEach(
+        (curDie) => calculatedScore += curDie.face
+      )
 
-      return chanceSum;
+      return calculatedScore;
     }
   }
 
