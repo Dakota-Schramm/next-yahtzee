@@ -25,8 +25,6 @@ const Game: NextPage = () => {
     console.log(diceShouldReroll)
   }, [diceShouldReroll])
   
-
-
   return (
     // Have main screen that lets you navigate to scores, exit and play
     <section className='flex w-screen h-screen'>

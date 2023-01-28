@@ -11,12 +11,9 @@ interface IScoreBox {
   onClick: () => void,
 }
 
-const ScoreBox = ({
-  title, 
-  value, 
-  canSelectScores, 
-  onClick,
-}: IScoreBox) => (
+const ScoreBox = (
+  { title, value, canSelectScores, onClick}: IScoreBox
+) => (
   <div className='relative grid items-center justify-center w-full grid-cols-3 p-2 bg-gray-100 border border-black border-solid'>
     <h5 className='text-3xl text-black'>{title}</h5>
     <p className=''>{'Insert info about rules here'}</p>
