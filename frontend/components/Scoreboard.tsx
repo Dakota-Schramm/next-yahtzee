@@ -62,23 +62,28 @@ interface IScoreboard {
   handleAddLowerScore: (score: ILowerSection) => void;
 }
 
+const PlayerScores = () => (
+  <header className="flex flex-col items-center justify-start w-full p-4">
+    <h3 className="text-3xl">Scoreboard</h3>
+    <section className="flex justify-between w-full">
+      <span className="flex flex-col items-center justify-center">
+        <h5>Current Score: </h5>
+        {0}
+      </span>
+      <span className="flex flex-col items-center justify-center">
+        <h5>Top Score: </h5>
+        {0}
+      </span>
+    </section>
+  </header>
+)
+
 const Scoreboard = (
   { currentDice, canSelectScores, upper, handleAddUpperScore, lower, handleAddLowerScore }: IScoreboard
 ) => (
   <section className="flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black">
-    <header className="flex flex-col items-center justify-start w-full p-4">
-      <h3 className="text-3xl">Scoreboard</h3>
-      <section className="flex justify-between w-full">
-        <span className="flex flex-col items-center justify-center">
-          <h5>Current Score: </h5>
-          {0}
-        </span>
-        <span className="flex flex-col items-center justify-center">
-          <h5>Top Score: </h5>
-          {0}
-        </span>
-      </section>
-    </header>
+    <PlayerScores />
+    
     {/* Upper  */}
     <ScoreBoardSection title='Upper Section'>
       {Object.entries(upper).map(
@@ -113,10 +118,8 @@ const Scoreboard = (
 )
 
 function calculateScore(currentDice: ICurrentDie[], type: string | number) {
-  // For UpperSection, only reward the scores if 
-  // three (or more) of a kind are rolled 
   if (typeof type === 'number') return getScoreForUpperSection(currentDice, type)
-  else return getScoreForLowerSection(currentDice, type)
+  else if (typeof type === 'string') return getScoreForLowerSection(currentDice, type)
 }
 
 function getScoreForUpperSection(currentDice: ICurrentDie[], type: number) { 
@@ -124,14 +127,11 @@ function getScoreForUpperSection(currentDice: ICurrentDie[], type: number) {
 
   const calculatedScore = currentDice.reduce(
     (accumulator, currentDiceObj) => {
-      if (currentDiceObj.face !== type) return accumulator
-      else {
-        diceCount += 1 
-        return accumulator + type
-      }
-  }, 0);
+      const shouldAddToScore = currentDiceObj.face === type
+      return shouldAddToScore ? accumulator + type : accumulator;
+    }, 0);
 
-  return diceCount >= 3 ? calculatedScore : 0;
+  return calculatedScore;
 }
 
 function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
