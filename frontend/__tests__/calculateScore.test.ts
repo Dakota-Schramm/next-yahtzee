@@ -33,10 +33,10 @@ test('all twos return 0 for 1 Upper score', () => {
   expect(outputScore).toBe(0)
 })
 
-test('no duplicates returns 0 for 1 Upper score', () => {
+test('no duplicates returns 1 for 1 Upper score', () => {
   const outputScore = calculateScore(noDuplicates, 1);
 
-  expect(outputScore).toBe(0)
+  expect(outputScore).toBe(1)
 })
 
 // Two
@@ -51,10 +51,10 @@ test('all ones returns 0 for 2 Upper score', () => {
   expect(outputScore).toBe(0)
 })
 
-test('no duplicates returns 0 for 2 Upper score', () => {
+test('no duplicates returns 2 for 2 Upper score', () => {
   const outputScore = calculateScore(noDuplicates, 2);
 
-  expect(outputScore).toBe(0)
+  expect(outputScore).toBe(2)
 })
 
 // Three
@@ -72,10 +72,10 @@ test('all ones returns 0 for 3 Upper score', () => {
   expect(outputScore).toBe(0)
 })
 
-test('no duplicates returns 0 for 3 Upper score', () => {
+test('no duplicates returns 3 for 3 Upper score', () => {
   const outputScore = calculateScore(noDuplicates, 3);
 
-  expect(outputScore).toBe(0)
+  expect(outputScore).toBe(3)
 })
 
 // Four
@@ -93,10 +93,10 @@ test('all ones returns 0 for 4 Upper score', () => {
   expect(outputScore).toBe(0)
 })
 
-test('no duplicates returns 0 for 4 Upper score', () => {
+test('no duplicates returns 4 for 4 Upper score', () => {
   const outputScore = calculateScore(noDuplicates, 4);
 
-  expect(outputScore).toBe(0)
+  expect(outputScore).toBe(4)
 })
 
 // Five
@@ -115,10 +115,33 @@ test('all ones returns 0 for 5 Upper score', () => {
   expect(outputScore).toBe(0)
 })
 
-test('no duplicates returns 0 for 5 Upper score', () => {
+test('no duplicates returns 5 for 5 Upper score', () => {
   const outputScore = calculateScore(noDuplicates, 5);
 
+  expect(outputScore).toBe(5)
+})
+
+// Six
+test('all sixes returns 30 for 6 Upper score', () => {
+  const outputScore = calculateScore(allSixes, 6);
+
+  expect(outputScore).toBe(30)
+})
+
+test('all ones returns 0 for 6 Upper score', () => {
+  const outputScore = calculateScore(allOnes, 6);
+
   expect(outputScore).toBe(0)
+})
+
+test('[2, 3, 4, 5, 6] returns 6 for 6 Upper score', () => {
+  const noDuplicatesTopSlice  = [ ...Array(5) ].map(
+    (_, idx) => ({ face: idx + 2, shouldReroll: false })
+  );
+
+  const outputScore = calculateScore(noDuplicatesTopSlice, 6);
+
+  expect(outputScore).toBe(6)
 })
 
 // LOWER SECTION
