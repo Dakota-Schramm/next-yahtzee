@@ -3,8 +3,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useState, FC, useLayoutEffect, useReducer, useContext } from 'react';
 
-import { upperSectionScores, lowerSectionScores } from '../constants';
-
 import Scoreboard from '../components/Scoreboard';
 import DiceTray, { ICurrentDie } from '../components/DiceTray';
 import FooterButtons from '../components/Footer';

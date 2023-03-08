@@ -12,14 +12,14 @@ export interface ILowerSection {
 }
 
 const upperSectionDict: IUpperSection = Object.assign(
-  {}, ...upperSectionScores.map(
-    x => ({ [x]: undefined })
+  {}, ...Object.entries(upperSectionScores).map(
+    ([key, _]) => ({ [key]: undefined })
   )
 );
 
 const lowerSectionDict: ILowerSection = Object.assign(
-  {}, ...lowerSectionScores.map(
-    x => ({ [x]: undefined })
+  {}, ...Object.entries(lowerSectionScores).map(
+    ([key, _]) => ({ [key]: undefined })
   )
 );
 
