@@ -10,10 +10,11 @@ import DiceTray, { ICurrentDie } from '../components/DiceTray';
 import FooterButtons from '../components/Footer';
 
 import useGameMeta from '../hooks/useGameMeta';
+import type { IGameMeta } from '../hooks/useGameMeta';
 
 const Game: NextPage = () => {
-  // Game Meta Info
   const [gameMeta, dispatchGameMeta] = useGameMeta();
+  const {currentDice, turn, footerButtonId, upper, lower } = gameMeta || {} as IGameMeta;
 
   function handleStart() { 
     dispatchGameMeta({
@@ -28,7 +29,7 @@ const Game: NextPage = () => {
   }
 
   function handleToggle(diceToToggle: number) {
-    const currentDicePrefs: boolean[] = gameMeta.currentDice.map(
+    const currentDicePrefs: boolean[] = currentDice.map(
       (_: unknown, idx: number) => diceToToggle === idx 
         ? !_.shouldReroll
         : _.shouldReroll
@@ -68,7 +69,14 @@ const Game: NextPage = () => {
     })
   }
 
-  const canReroll = gameMeta.turn !== 3;
+  const footerHandlers = {
+    handleStart,
+    handleReroll,
+    handleRestart,
+    handlePlayAgain,
+  }
+
+  const canReroll = turn !== 3;
 
   return (
     // Have main screen that lets you navigate to scores, exit and play
@@ -78,31 +86,21 @@ const Game: NextPage = () => {
           <h1 className='text-3xl'>Yahtzee!</h1>
         </header>
         {
-          gameMeta.turn !== 0 && (
+          turn !== 0 && (
             <DiceTray 
-              currentDice={gameMeta.currentDice} 
+              currentDice={currentDice} 
               canReroll={canReroll}
               toggleDiceReroll={handleToggle} 
             />
           )
         }
         <footer className='flex items-center justify-center p-8'>
-          <FooterButtons 
-            currentId={gameMeta.footerButtonId}
-            handleStart={handleStart}              
-            handleReroll={handleReroll}
-            handleRestart={handleRestart}
-            handlePlayAgain={handlePlayAgain}
-          />
+          <FooterButtons currentId={footerButtonId} {...footerHandlers} />
         </footer>
       </section>
       <Scoreboard 
-        currentDice={gameMeta.currentDice}
         canSelectScores={!canReroll}
-        upper={gameMeta.upper}
-        lower={gameMeta.lower}
-        handleAddUpperScore={handleAddUpperScore}
-        handleAddLowerScore={handleAddLowerScore}
+        {...{currentDice, upper, handleAddUpperScore, lower, handleAddLowerScore}}
       />
     </section>
   )

@@ -112,39 +112,35 @@ function gameReducer(gameState: IGameMeta, action: GameAction){
         currentDice: diceWithRerollPreferenceChanged
       })
     }
-    case 'UPPER_SCORE': {
-      const newScore = {
-        ...gameState.upper,
-        [action.column]: action.value
+    case 'UPPER_SCORE' || 'LOWER_SCORE': {
+      const getsYahtzeeBonus = (
+        gameState.yahtzeeBonuses && gameState.yahtzeeBonuses > 0
+        && gameState.currentDice.every(die => die.face === action.column)
+      );
+
+      const scoreAfterBonusCheck = getsYahtzeeBonus ? action.value + 100 : action.value;
+      let newScore = {
+        [action.column]: scoreAfterBonusCheck
       } 
 
-      return ({
-        ...gameState,
-        upper: newScore,
-        total: gameState.total + action.value,
-        ...rerollOnFirstTurn
-      })
-    }
-    case 'LOWER_SCORE': {
-      const newScore = {
-        ...gameState.lower,
-        [action.column]: action.value
+      let scorePartial;
+      if (action.type === 'UPPER_SCORE') {
+        newScore = { ...gameState.upper, ...newScore };
+        scorePartial = ({ upper: newScore });
+      } else {
+        newScore = { ...gameState.lower, ...newScore}
+        scorePartial = ({ lower: newScore });
       }
 
-      return ({
+      const newState = {
         ...gameState,
-        lower: newScore,
-        total: gameState.total + action.value,
+        upper: newScore,
+        total: gameState.total + newScore[action.column],
+        yahtzeeBonuses: getsYahtzeeBonus ? (gameState.yahtzeeBonuses + 1 ?? 0) : gameState.yahtzeeBonuses,
         ...rerollOnFirstTurn
-      })
-    }
-    case 'YAHTZEE': {
-      return ({
-        ...gameState,
-        yahtzeeBonuses: gameState.yahtzeeBonuses + 1 ?? 0,
-        total: gameState.total + (gameState.yahtzeeBonuses > 0 ? 100 : 50),
-        ...rerollOnFirstTurn
-      })
+      }
+
+      return newState
     }
     case 'NEXT_ROUND': {
       return ({
