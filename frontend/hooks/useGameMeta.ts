@@ -13,17 +13,19 @@ export interface ILowerSection {
 
 const upperSectionDict: IUpperSection = Object.assign(
   {},
-  ...Object.keys(upperSectionScores).map(
+  ...upperSectionScores.map(
     x => ({ [x]: undefined })
   )
 );
 
 const lowerSectionDict: ILowerSection = Object.assign(
   {},
-  ...Object.keys(lowerSectionScores).map(
+  ...lowerSectionScores.map(
     x => ({ [x]: undefined })
   )
 );
+
+console.log({ upperSectionDict, lowerSectionDict })
 
 interface IScoreMeta {
   // Upper Section
