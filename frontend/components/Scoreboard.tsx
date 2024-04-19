@@ -1,16 +1,7 @@
 import React, { useState, FC, useEffect, Dispatch, SetStateAction, useContext } from 'react'
-import { ILowerSection, IUpperSection } from '../pages/game';
-import { initialScore } from '../hooks/useGameMeta';
+import { ILowerSection, IUpperSection } from '~/pages/game';
+import { initialScore } from '~/hooks/useGameMeta';
 import { ICurrentDie } from './DiceTray';
-
-interface IScoreboard {
-  currentDice: ICurrentDie[];
-  canSelectScores: boolean;
-  upper: IUpperSection;
-  lower: ILowerSection;
-  handleAddUpperScore: (score: IUpperSection) => void;
-  handleAddLowerScore: (score: ILowerSection) => void;
-}
 
 interface IScoreBox {
   title: string | number, 
@@ -54,12 +45,12 @@ const ScoreBoardSection = (
 interface IScoreboard {
   currentDice: ICurrentDie[];
   canSelectScores: boolean;
-  gameTurn: number;
-  addScore: (type: string, column: number | string, value: number) => void;
+  // gameTurn: number;
+  // addScore: (type: string, column: number | string, value: number) => void;
   upper: IUpperSection;
-  handleAddUpperScore: (score: IUpperSection) => void;
+  handleAddUpperScore: (section: number, score: IUpperSection) => void;
   lower: ILowerSection;
-  handleAddLowerScore: (score: ILowerSection) => void;
+  handleAddLowerScore: (section: string, score: ILowerSection) => void;
 }
 
 const PlayerScores = () => (
@@ -123,8 +114,6 @@ function calculateScore(currentDice: ICurrentDie[], type: string | number) {
 }
 
 function getScoreForUpperSection(currentDice: ICurrentDie[], type: number) { 
-  let diceCount = 0;
-
   const calculatedScore = currentDice.reduce(
     (accumulator, currentDiceObj) => {
       const shouldAddToScore = currentDiceObj.face === type
@@ -235,8 +224,6 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
   }
 }
 
-export {
-  calculateScore
-}
+export { calculateScore }
 
 export default Scoreboard
