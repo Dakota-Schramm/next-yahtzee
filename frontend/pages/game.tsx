@@ -81,29 +81,35 @@ const Game: NextPage = () => {
   return (
     // Have main screen that lets you navigate to scores, exit and play
     <section className='flex w-screen h-screen'>
-      <section className='flex flex-col items-center justify-between w-full h-full'>
+      <section className='flex flex-col items-center justify-between w-full h-full bg-[#d01014]'>
         <header className='p-8'>
-          <h1 className='text-3xl'>Yahtzee!</h1>
+          <h1 className='text-8xl font-revueStd text-white -skew-y-6'>
+            Yahtzee!
+          </h1>
         </header>
-        {
-          turn !== 0 && (
-            <DiceTray 
-              currentDice={currentDice} 
-              canReroll={canReroll}
-              toggleDiceReroll={handleToggle} 
-            />
-          )
-        }
+        {turn !== 0 && (
+          <DiceTray
+            currentDice={currentDice}
+            canReroll={canReroll}
+            toggleDiceReroll={handleToggle}
+          />
+        )}
         <footer className='flex items-center justify-center p-8'>
           <FooterButtons currentId={footerButtonId} {...footerHandlers} />
         </footer>
       </section>
-      <Scoreboard 
+      <Scoreboard
         canSelectScores={!canReroll}
-        {...{currentDice, upper, handleAddUpperScore, lower, handleAddLowerScore}}
+        {...{
+          currentDice,
+          upper,
+          handleAddUpperScore,
+          lower,
+          handleAddLowerScore,
+        }}
       />
     </section>
-  )
+  );
 }
 
 export default Game 

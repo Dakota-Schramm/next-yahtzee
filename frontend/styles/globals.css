@@ -5,3 +5,12 @@
 * {
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: "RevueStd";
+  src: url('../public/fonts/RevueStd.ttf') format('truetype');
+}
+
+.font-revueStd {
+  font-family: "RevueStd", sans-serif;
+}
