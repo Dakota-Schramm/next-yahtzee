@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useEffect, useState, FC, useLayoutEffect, useReducer, useContext } from 'react';
+import React, { useEffect, useState, FC, useLayoutEffect, useReducer, useContext } from 'react';
 
 import { upperSectionScores, lowerSectionScores } from '../constants';
 
