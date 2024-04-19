@@ -1,3 +1,5 @@
+export const numOfDice = 5;
+
 export const upperSectionScores = [
   1,
   2,

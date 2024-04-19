@@ -25,8 +25,6 @@ const lowerSectionDict: ILowerSection = Object.assign(
   )
 );
 
-console.log({ upperSectionDict, lowerSectionDict })
-
 interface IScoreMeta {
   // Upper Section
   upper: IUpperSection;
@@ -52,7 +50,26 @@ interface GameAction {
   shouldReroll?: boolean[];
 }
 
-const numOfDice = 5;
+const STATES = {
+  game: {
+
+  },
+  scorecard: {
+
+  }
+}
+
+// https://colin.is/blog/2020/yahtzee-state-machine/
+const NEXT_STATE_GRAPH = {
+  START: {
+    on: {
+      ROLL: ""
+    }
+  },
+  REROLL: {},
+  TOGGLE_CHOSEN_DIE: {},
+
+}
 
 export default function useGameMeta() {
   // Game Meta Info
