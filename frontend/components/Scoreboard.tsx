@@ -78,8 +78,9 @@ const Scoreboard = (
     {/* Upper  */}
     <ScoreBoardSection title='Upper Section'>
       {Object.entries(upper).map(
-        ([key, value]) => (
+        ([key, value], idx) => (
           <ScoreBox
+            key={`${key}-${idx}_${Date.now()}`}
             title={key}
             value={value}
             canSelectScores={canSelectScores}
@@ -93,8 +94,9 @@ const Scoreboard = (
     {/* Lower */}
     <ScoreBoardSection title='Lower Section'>
       {Object.entries(lower).map(
-        ([key, value]) => (
+        ([key, value], idx) => (
           <ScoreBox
+            key={`${key}-${idx}_${Date.now()}`}
             title={key}
             value={value}
             canSelectScores={canSelectScores}

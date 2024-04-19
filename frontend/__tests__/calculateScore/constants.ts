@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 export const allOnes = [ ...Array(5) ].map(
   (_) => ({ face: 1, shouldReroll: false })
 );
