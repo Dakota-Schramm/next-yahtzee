@@ -7,3 +7,4 @@ Add box shadows to dice
 
 Figure out how to refactor into state machine?
 - Get rid of footer state variable
+- switch to use xstate
