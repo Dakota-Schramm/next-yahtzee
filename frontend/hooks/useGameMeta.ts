@@ -1,6 +1,6 @@
 import { useState, useReducer, useEffect } from "react";
 
-import { upperSectionScores, lowerSectionScores } from '../constants';
+import { upperSectionScores, lowerSectionScores, numOfDice } from '../constants';
 import { ICurrentDie } from "../components/DiceTray";
 
 export interface IUpperSection {
