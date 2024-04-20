@@ -1,4 +1,4 @@
-import React, {
+import {
   useState,
   FC,
   useEffect,
@@ -20,28 +20,23 @@ interface IScoreBox {
   onClick: () => void;
 }
 
-const ScoreBox = ({ title, value, canSelectScores, onClick }: IScoreBox) => (
-  <button 
-    className='flex flex-col items-center justify-center min-w-36 p-2 bg-gray-100 border border-black border-solid'
-  >
-    <header className='relative flex w-full justify-between'>
-      <h5 className='text-3xl text-black text-center w-full'>{title}</h5>
-      <div className='w-full absolute top-0 right-0 flex justify-end'>
-        <Tooltip tooltipText='Insert info about rules here'/>
-      </div>
-    </header>
-    <button
-      className={
-        'text-sm text-black border-solid w-full h-full border-4 ' +
-        `${value !== undefined ? 'border-green-400' : 'border-red-400'} ` +
-        `${canSelectScores ? 'bg-white' : 'bg-gray-600'}`
-      }
+const ScoreBox = ({ title, value, canSelectScores, onClick }: IScoreBox) => {
+  return (
+    <button 
+      className='flex flex-col items-center justify-center min-w-36 p-2 bg-gray-100 border border-black border-solid disabled:outline-red-400 disabled:outline-4 disabled:outline'
       onClick={onClick}
+      disabled={!canSelectScores}
     >
+      <header className='relative flex w-full justify-between'>
+        <h5 className='text-3xl text-black text-center w-full'>{title}</h5>
+        <div className='w-full absolute top-0 right-0 flex justify-end'>
+          <Tooltip tooltipText='Insert info about rules here'/>
+        </div>
+      </header>
       {value ?? '—'}
     </button>
-  </button>
-);
+  );
+}
 
 interface IScoreboardSection {
   title: string;
