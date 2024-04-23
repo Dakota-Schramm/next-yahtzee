@@ -1,27 +1,8 @@
 import { useState, useReducer, useEffect } from "react";
 
-import { upperSectionScores, lowerSectionScores, numOfDice } from '../constants';
+import { numOfDice, IUpperSection, ILowerSection, upperSectionDict, lowerSectionDict } from '../constants';
 import { ICurrentDie } from "../components/DiceTray";
 
-export interface IUpperSection {
-  [key: number]: number | undefined;
-}
-
-export interface ILowerSection {
-  [key: string]: number | undefined;
-}
-
-const upperSectionDict: IUpperSection = Object.assign(
-  {}, ...Object.keys(upperSectionScores).map(
-    x => ({ [x]: undefined })
-  )
-);
-
-const lowerSectionDict: ILowerSection = Object.assign(
-  {}, ...Object.keys(lowerSectionScores).map(
-    x => ({ [x]: undefined })
-  )
-);
 
 interface IScoreMeta {
   // Upper Section
@@ -48,27 +29,6 @@ interface GameAction {
   shouldReroll?: boolean[];
 }
 
-const STATES = {
-  game: {
-
-  },
-  scorecard: {
-
-  }
-}
-
-// https://colin.is/blog/2020/yahtzee-state-machine/
-const NEXT_STATE_GRAPH = {
-  START: {
-    on: {
-      ROLL: ""
-    }
-  },
-  REROLL: {},
-  TOGGLE_CHOSEN_DIE: {},
-
-}
-
 export default function useGameMeta() {
   // Game Meta Info
   const [game, gameDispatch] = useReducer(gameReducer, initialGame);
@@ -76,19 +36,6 @@ export default function useGameMeta() {
   return [game, gameDispatch]
 }
 
-function rerollDice(currentDice: ICurrentDie[], shouldRerollOverride?: boolean[]) {
-  const newDice = currentDice.map(
-    (prevRoll, idx) => {
-      const shouldReroll = shouldRerollOverride ? shouldRerollOverride[idx] : prevRoll.shouldReroll;
-      if (!shouldReroll) return { ...prevRoll };
-
-      const newRoll = Math.floor(Math.random() * 6 + 1);
-
-      return ({ face: newRoll, shouldReroll: true  });
-  })
-
-  return newDice
-}
 
 function gameReducer(gameState: IGameMeta, action: GameAction){
   const rerollAll = [ ...Array(numOfDice) ].map((_) => true);

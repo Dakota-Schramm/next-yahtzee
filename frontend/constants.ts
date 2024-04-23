@@ -4,6 +4,15 @@ interface Score {
   [key: string | number]: string
 }
 
+export interface IUpperSection {
+  [key: number]: number | undefined;
+}
+
+export interface ILowerSection {
+  [key: string]: number | undefined;
+}
+
+
 export const upperSectionScores: Score = {
   1: "Sum of all ones rolled",
   2: "Sum of all twos rolled",
@@ -12,6 +21,12 @@ export const upperSectionScores: Score = {
   5: "Sum of all fives rolled",
   6: "Sum of all sixes rolled"
 };
+
+export const upperSectionDict: IUpperSection = Object.assign(
+  {}, ...Object.keys(upperSectionScores).map(
+    x => ({ [x]: undefined })
+  )
+);
 
 export const lowerSectionScores: Score ={
   "3 of a kind": "Three dice have the same face",
@@ -22,3 +37,9 @@ export const lowerSectionScores: Score ={
   "Yahtzee!": "Five of a kind - all dice have the same face",
   "Chance": "Sum of all dice"
 }
+
+export const lowerSectionDict: ILowerSection = Object.assign(
+  {}, ...Object.keys(lowerSectionScores).map(
+    x => ({ [x]: undefined })
+  )
+);
