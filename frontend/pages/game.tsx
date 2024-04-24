@@ -14,6 +14,11 @@ import type { IGameMeta } from '../hooks/useGameMeta';
 import { useMachine } from '@xstate/react';
 import YahtzeeMachine from '~/game';
 
+/*
+  TODO:
+  - Change game loop to allow scoring before last turn
+*/
+
 const Game: NextPage = () => {
   const [stateMachine, send] = useMachine(YahtzeeMachine);
   const {
@@ -34,6 +39,7 @@ const Game: NextPage = () => {
     send({ type: "START" })
     send({ type: "ROLL" })
     send({ type: "ROLLED" })
+    console.log("First role", stateMachine.value)
   }
   function handleReroll() {
     send({ type: "ROLL" })
@@ -49,11 +55,15 @@ const Game: NextPage = () => {
   function handlePlayAgain() { send({ type: "STARTOVER" }) }
 
   function handleAddUpperScore(type: number, value: number) {
-    send({ type: "UPPER_SCORE", column: type, value })
+    send({ type: "SCORE_TURN", column: type, value })
+    send({ type: "ROLL" })
+    send({ type: "ROLLED" })
   }
 
   function handleAddLowerScore(type: string, value: number) {
-    send({ type: "LOWER_SCORE", column: type, value })
+    send({ type: "SCORE_TURN", column: type, value })
+    send({ type: "ROLL" })
+    send({ type: "ROLLED" })
   }
 
   const footerHandlers = {

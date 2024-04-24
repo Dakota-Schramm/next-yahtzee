@@ -2,7 +2,7 @@ import React, { useState, FC } from 'react'
 
 export interface ICurrentDie {
   face: number; 
-  shouldReroll: boolean;
+  location: string;
 }
 
 interface IDiceButton extends ICurrentDie {
@@ -17,20 +17,25 @@ interface IDiceTray {
 }
 
 const Die = (
-  {face, shouldReroll, onClick, isDisabled}: IDiceButton
-) => (
-  <button 
-    className={
-      'border border-solid border-black rounded-xl w-16 h-16 lg:w-24 lg:h-24 cursor-pointer ' + 
-      `${shouldReroll ? 'bg-white text-black' : 'bg-gray-700 text-white'} ` +
-      `${isDisabled ? '' : 'hover:outline hover:outline-4 hover:outline-solid hover:outline-blue-400'}`
-    }
-    onClick={onClick}
-    disabled={isDisabled}
-  >
-    <span className='flex items-center justify-center w-full h-full'>{face}</span>
-  </button>
-);
+  { face, onClick, isDisabled, location }: IDiceButton
+) => {
+  const shouldReroll = location === "cup";
+  console.log({ face, location })
+
+  return (
+    <button 
+      className={
+        'border border-solid border-black rounded-xl w-16 h-16 lg:w-24 lg:h-24 cursor-pointer ' + 
+        `${shouldReroll ? 'bg-white text-black' : 'bg-gray-700 text-white'} ` +
+        `${isDisabled ? '' : 'hover:outline hover:outline-4 hover:outline-solid hover:outline-blue-400'}`
+      }
+      onClick={onClick}
+      disabled={isDisabled}
+    >
+      <span className='flex items-center justify-center w-full h-full'>{face}</span>
+    </button>
+  );
+}
 
 const DiceTray = (
   {currentDice, toggleDiceReroll, canReroll}: IDiceTray
@@ -44,8 +49,8 @@ const DiceTray = (
               toggleDiceReroll(diceNum)
             }}
             face={diceObj.face}
-            shouldReroll={diceObj.shouldReroll}
             isDisabled={!canReroll}
+            location={diceObj.location}
           />
         )
       )

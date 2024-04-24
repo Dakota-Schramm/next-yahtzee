@@ -37,7 +37,7 @@ const YahtzeeMachine = createMachine(
         initial: "newturn",
         states: {
           newturn: {
-            entry: "initTurn",
+            entry: ["initTurn"],
             on: {
               ROLL: { target: "rolling" }
             }
@@ -56,12 +56,10 @@ const YahtzeeMachine = createMachine(
             }
           },
           tallyScore: {
-            on: {
-              always: [
-                { target: 'gameover', guard: 'isGameOver', },
-                { target: 'newturn', }
-              ]
-            }
+            always: [
+              { target: 'gameover', guard: 'isGameOver', },
+              { target: 'newturn' }
+            ]
           },
           gameover: {
             type: 'final',
@@ -103,15 +101,13 @@ const YahtzeeMachine = createMachine(
         })
       }),
       changeDieLocation: assign(({ context, event }) => {
-        console.log({ event })
         const cupAndTrayObj = moveDieBetweenLocations(event.dieToMove, context.currentDice)
 
         return ({ ...context, ...cupAndTrayObj })
       }),
-      selectScore: assign(({ context, event }) => {
-        return calculateScoreForSection(context, event.column, event.value)
-
-      }),
+      selectScore: ({ context, event }, params) => {
+        return assignScoreSelection(context, event, params)
+      },
       gameOverUI: (({ context }) => {
         return ({
           ...context,
@@ -166,16 +162,17 @@ function moveDieBetweenLocations(dieToMove: number, dice: ICurrentDie[]) {
 function calculateScoreForSection(
   context, sectionToScore, score
 ) {
-  const { cupDice, trayDice, upperSection, lowerSection } = context;
-  const rolled = [...cupDice, ...trayDice].filter((val) => val !== null);
+  const { currentDice, upperSection, lowerSection } = context;
   const scores = { upperSection, lowerSection }
 
-  const upperSectionChosen = Object.keys(upperSectionDict).includes(sectionToScore);
-  const lowerSectionChosen = Object.keys(lowerSectionDict).includes(sectionToScore);
+  const upperSectionChosen = Object.keys(upperSection).includes(sectionToScore);
+  const lowerSectionChosen = Object.keys(lowerSection).includes(sectionToScore);
   if (upperSectionChosen) {
     scores.upperSection[sectionToScore] = score
   } else if (lowerSectionChosen) {
     scores.lowerSection[sectionToScore] = score
+  } else {
+    console.log("Neither: ", Object.keys(upperSection), sectionToScore)
   }
 
   return ({
@@ -183,6 +180,11 @@ function calculateScoreForSection(
     ...scores,
     footerButtonId: 2
   })
+}
+
+function assignScoreSelection(context, event, params) {
+  console.log("Scoring", { context, event, params })
+  assign(calculateScoreForSection(context, event.column, event.value))
 }
 
 export default YahtzeeMachine;
