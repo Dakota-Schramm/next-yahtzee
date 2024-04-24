@@ -12,7 +12,7 @@ import FooterButtons from '../components/Footer';
 import useGameMeta from '../hooks/useGameMeta';
 import type { IGameMeta } from '../hooks/useGameMeta';
 import { useMachine } from '@xstate/react';
-import YahtzeeMachine from '~/game';
+import YahtzeeMachine, { scoreCardFilled } from '~/game';
 
 /*
   TODO:
@@ -39,7 +39,6 @@ const Game: NextPage = () => {
     send({ type: "START" })
     send({ type: "ROLL" })
     send({ type: "ROLLED" })
-    console.log("First role", stateMachine.value)
   }
   function handleReroll() {
     send({ type: "ROLL" })
@@ -50,20 +49,36 @@ const Game: NextPage = () => {
     send({ type: "MOVE_DIE", dieToMove: diceToToggle })
   }
 
-  function handleRestart() { send({ type: "STARTOVER" }) }
-
-  function handlePlayAgain() { send({ type: "STARTOVER" }) }
-
-  function handleAddUpperScore(type: number, value: number) {
-    send({ type: "SCORE_TURN", column: type, value })
+  function handleRestart() { 
+    send({ type: "STARTOVER" })
     send({ type: "ROLL" })
     send({ type: "ROLLED" })
   }
 
-  function handleAddLowerScore(type: string, value: number) {
-    send({ type: "SCORE_TURN", column: type, value })
+  function handlePlayAgain() {
+    send({ type: "STARTOVER" })
     send({ type: "ROLL" })
     send({ type: "ROLLED" })
+  }
+
+  function handleAddUpperScore(type: number, value: number) {
+    send({ type: "SCORE_TURN", column: type, value })
+    const isFinalMove = scoreCardFilled(stateMachine.context)
+    if (!isFinalMove) {
+      send({ type: "NEXT_TURN" })
+      send({ type: "ROLL" })
+      send({ type: "ROLLED" })
+    }
+  }
+
+  function handleAddLowerScore(type: string, value: number) {
+    send({ type: "SCORE_TURN", column: type, value })
+    const isFinalMove = scoreCardFilled(stateMachine.context)
+    if (!isFinalMove) {
+      send({ type: "NEXT_TURN" })
+      send({ type: "ROLL" })
+      send({ type: "ROLLED" })
+    }
   }
 
   const footerHandlers = {

@@ -20,7 +20,6 @@ const Die = (
   { face, onClick, isDisabled, location }: IDiceButton
 ) => {
   const shouldReroll = location === "cup";
-  console.log({ face, location })
 
   return (
     <button 

@@ -56,10 +56,10 @@ const YahtzeeMachine = createMachine(
             }
           },
           tallyScore: {
-            always: [
-              { target: 'gameover', guard: 'isGameOver', },
-              { target: 'newturn' }
-            ]
+            always: { target: 'gameover', guard: 'isGameOver' },
+            on: {
+              NEXT_TURN: { target: 'newturn' }
+            }
           },
           gameover: {
             type: 'final',
@@ -108,7 +108,7 @@ const YahtzeeMachine = createMachine(
       selectScore: ({ context, event }, params) => {
         return assignScoreSelection(context, event, params)
       },
-      gameOverUI: (({ context }) => {
+      gameOverUI: assign(({ context }) => {
         return ({
           ...context,
           footerButtonId: 3
@@ -123,10 +123,9 @@ const YahtzeeMachine = createMachine(
         return context.currentRoll < 3
       },
       isGameOver: ({ context, event }) => {
-        const { upperSection, lowerSection } = context;
-
-        return !Object.values(upperSection).includes(undefined) && 
-          !Object.values(lowerSection).includes(undefined)
+        const check = scoreCardFilled(context) 
+        console.log('hit', check)
+        return check 
       }
     }
   }
@@ -182,8 +181,15 @@ function calculateScoreForSection(
   })
 }
 
+export function scoreCardFilled(context) {
+  const { upperSection, lowerSection } = context;
+  const upperFilled = !Object.values(upperSection).includes(undefined)
+  const lowerFilled = !Object.values(lowerSection).includes(undefined)
+
+  return upperFilled && lowerFilled
+}
+
 function assignScoreSelection(context, event, params) {
-  console.log("Scoring", { context, event, params })
   assign(calculateScoreForSection(context, event.column, event.value))
 }
 
