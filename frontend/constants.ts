@@ -1,4 +1,5 @@
 export const numOfDice = 5;
+export const numOfRolls = 3;
 
 interface Score {
   [key: string | number]: string
