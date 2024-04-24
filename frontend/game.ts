@@ -1,7 +1,7 @@
 import { createMachine, assign } from 'xstate';
 import { lowerSectionDict, numOfDice, upperSectionDict, upperSectionScores, lowerSectionScores } from './constants';
 
-import type { ICurrentDie } from "~/components/DiceTray";
+import { type ICurrentDie } from "~/components/DiceTray";
 
 /*
     TO CONSIDER
@@ -9,6 +9,9 @@ import type { ICurrentDie } from "~/components/DiceTray";
 
 */
 
+const baseDice = new Array(numOfDice)
+  .fill(null)
+  .map((_, idx) => ({ face: idx, location: "cup" }));
 
 const YahtzeeMachine = createMachine(
   {
@@ -16,17 +19,16 @@ const YahtzeeMachine = createMachine(
     initial: 'welcome',
 
     context: {
-      dice: numOfDice,
-      rolls: 3,
-      cupDice: [],
-      trayDice: [],
-      currentRoll: 1,
+      footerButtonId: 0,
+      currentDice: baseDice,
+      currentRoll: 0,
       upperSection: structuredClone(upperSectionDict),
       lowerSection: structuredClone(lowerSectionDict)
     },
 
     states: {
       welcome: {
+        entry: ["initGame"],
         on: {
           START: { target: "playing"},
         }
@@ -35,133 +37,129 @@ const YahtzeeMachine = createMachine(
         initial: "newturn",
         states: {
           newturn: {
-            entry: ["getRandomRoll"],
+            entry: "initTurn",
             on: {
               ROLL: { target: "rolling" }
             }
           },
           rolling: {
+            entry: "rollDice",
             on: {
               ROLLED: { target: "deciding" }
             }
           },
           deciding: {
             on: {
-              ROLL: { target: "rolling", cond: "canRoll" },
+              ROLL: { target: "rolling", guard: "canRoll" },
               MOVE_DIE: { actions: "changeDieLocation" },
               SCORE_TURN: { target: "tallyScore", actions: "selectScore" }
             }
           },
           tallyScore: {
-              on: {
-                '': [
-                  {
-                    target: 'gameover',
-                    cond: 'isGameOver',
-                  },
-                  {
-                    target: 'newturn',
-                  }
-                ]
-              }
+            on: {
+              always: [
+                { target: 'gameover', guard: 'isGameOver', },
+                { target: 'newturn', }
+              ]
+            }
           },
           gameover: {
             type: 'final',
-            entry: ['getFinalScore'],
+            entry: ['gameOverUI', 'getFinalScore'],
           }
         },
         on: {
-          STARTOVER: { target: ".newturn", actions: "resetGame"}
+          STARTOVER: { target: ".newturn", actions: "initGame"}
         }
       },
     },
   },
   {
     actions: {
-      getRandomRoll: assign((context) => {
+      initGame: assign((context) => {
         return ({
-          ...context,
-          trayDice: rerollDice(context.trayDice),
-          cupDice: new Array(numOfDice).fill(null),
-          currentRoll: 1,
+          ...context.context,
+          currentDice: baseDice,
+          currentRoll: 0,
+          footerButtonId: 0,
+          upperSection: structuredClone(upperSectionDict),
+          lowerSection: structuredClone(lowerSectionDict)
         })
-
       }),
-      getReroll: assign((context) => {
+      initTurn: assign((context) => {
+        return ({
+          ...context.context,
+          currentDice: baseDice,
+          currentRoll: 0,
+          footerButtonId: 1,
+        })
+      }),
+      rollDice: assign(({ context }) => {
         return ({
           ...context,
-          trayDice: rerollDice(context.trayDice),
+          currentDice: rerollDice(context.currentDice),
           currentRoll: context.currentRoll + 1,
 
         })
       }),
-      changeDieLocation: assign((context, event) => {
-        const cupAndTrayObj = moveDieBetweenLocations(
-          event.dieToMove,
-          context.trayDice,
-          context.cupDice
-        )
+      changeDieLocation: assign(({ context, event }) => {
+        console.log({ event })
+        const cupAndTrayObj = moveDieBetweenLocations(event.dieToMove, context.currentDice)
 
         return ({ ...context, ...cupAndTrayObj })
       }),
-      selectScore: assign((context, event) => {
+      selectScore: assign(({ context, event }) => {
         return calculateScoreForSection(context, event.column, event.value)
 
+      }),
+      gameOverUI: (({ context }) => {
+        return ({
+          ...context,
+          footerButtonId: 3
+        })
       }),
       getFinalScore: () => {
         return 0
       },
-      resetGame: assign((context, event) => {
-        return ({
-          ...context,
-          currentRoll: 1,
-          upperSection: structuredClone(upperSectionDict),
-          lowerSection: structuredClone(lowerSectionDict)
-        })
-      })
     },
     guards: {
-      canRoll: (context, event) => {
-        return context.turn < 3
+      canRoll: ({ context, event }) => {
+        return context.currentRoll < 3
       },
-      isGameOver: (context, event) => {
+      isGameOver: ({ context, event }) => {
         const { upperSection, lowerSection } = context;
 
         return !Object.values(upperSection).includes(undefined) && 
           !Object.values(lowerSection).includes(undefined)
-
       }
     }
   }
 );
 
-function rerollDice(trayDice: (number | null)[]) {
-  return trayDice.map(
-    (prevRoll, idx) => {
-      if (!prevRoll) return prevRoll;
+function rerollDice(dice: ICurrentDie[]) {
+  return dice.map(
+    (prevRoll) => {
+      const { face, location, } = prevRoll
+      const shouldReroll = location === "cup";
+      if (!shouldReroll) return prevRoll;
 
       const newRoll = Math.floor(Math.random() * 6 + 1);
-      return newRoll
+      return ({ ...prevRoll, face: newRoll }) 
   })
 }
 
-function moveDieBetweenLocations(dieToMove: number, tray: (number | null)[], cup: (number | null)[]) {
-  const newTray = [...tray];
-  const newCup = [...cup];
+function moveDieBetweenLocations(dieToMove: number, dice: ICurrentDie[]) {
+  const newDice = dice.map((prevDie, idx) => {
+    if (idx !== dieToMove) return prevDie;
+    else return ({
+      ...prevDie,
+      location: prevDie.location === "cup" ? "tray" : "cup"
+    })
 
-  const foundInTray = newTray[dieToMove]
-  if (foundInTray) {
-    newCup[dieToMove] = foundInTray
-    newTray[dieToMove] = null
-  } else {
-    const temp = newCup[dieToMove]
-    newCup[dieToMove] = null 
-    newTray[dieToMove] = temp 
-  }
+  })
 
   return {
-    trayDice: newTray,
-    cupDice: newCup
+    currentDice: newDice
   }
 }
 
@@ -182,7 +180,9 @@ function calculateScoreForSection(
 
   return ({
     ...context,
-    ...scores
+    ...scores,
+    footerButtonId: 2
   })
 }
 
+export default YahtzeeMachine;

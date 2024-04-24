@@ -11,62 +11,49 @@ import FooterButtons from '../components/Footer';
 
 import useGameMeta from '../hooks/useGameMeta';
 import type { IGameMeta } from '../hooks/useGameMeta';
+import { useMachine } from '@xstate/react';
+import YahtzeeMachine from '~/game';
 
 const Game: NextPage = () => {
-  const [gameMeta, dispatchGameMeta] = useGameMeta();
-  const {currentDice, turn, footerButtonId, upper, lower } = gameMeta || {} as IGameMeta;
+  const [stateMachine, send] = useMachine(YahtzeeMachine);
+  const {
+    currentRoll,
+    currentDice,
+    footerButtonId,
+    upperSection: upper,
+    lowerSection: lower,
+  } = stateMachine.context;
 
-  function handleStart() { 
-    dispatchGameMeta({
-      type: "START"
-    })
+  // const {currentDice, turn, footerButtonId, upper, lower } = gameMeta || {} as IGameMeta;
+
+  useEffect(() => {
+    console.log({ value: stateMachine.value, context: stateMachine.context })
+  }, [stateMachine.context, stateMachine.value]);
+
+  function handleStart() {
+    send({ type: "START" })
+    send({ type: "ROLL" })
+    send({ type: "ROLLED" })
   }
-
   function handleReroll() {
-    dispatchGameMeta({
-      type: "REROLL"
-    })
+    send({ type: "ROLL" })
+    send({ type: "ROLLED" })
   }
 
   function handleToggle(diceToToggle: number) {
-    const currentDicePrefs: boolean[] = currentDice.map(
-      (_: unknown, idx: number) => diceToToggle === idx 
-        ? !_.shouldReroll
-        : _.shouldReroll
-    );
-
-    dispatchGameMeta({
-      type: "TOGGLE_REROLL",
-      shouldReroll: currentDicePrefs     
-    })
+    send({ type: "MOVE_DIE", dieToMove: diceToToggle })
   }
 
-  function handleRestart() { 
-    dispatchGameMeta({
-      type: "RESTART"
-    })
-  }
+  function handleRestart() { send({ type: "STARTOVER" }) }
 
-  function handlePlayAgain() { 
-    dispatchGameMeta({
-      type: "PLAY_AGAIN"
-    })
-  }
+  function handlePlayAgain() { send({ type: "STARTOVER" }) }
 
   function handleAddUpperScore(type: number, value: number) {
-    dispatchGameMeta({
-      type: "UPPER_SCORE",
-      column: type,
-      value
-    })
+    send({ type: "UPPER_SCORE", column: type, value })
   }
 
   function handleAddLowerScore(type: string, value: number) {
-    dispatchGameMeta({
-      type: "LOWER_SCORE",
-      column: type,
-      value
-    })
+    send({ type: "LOWER_SCORE", column: type, value })
   }
 
   const footerHandlers = {
@@ -76,7 +63,7 @@ const Game: NextPage = () => {
     handlePlayAgain,
   }
 
-  const canReroll = turn !== 3;
+  const canReroll = currentRoll !== 3;
 
   return (
     // Have main screen that lets you navigate to scores, exit and play
@@ -87,7 +74,7 @@ const Game: NextPage = () => {
             Yahtzee!
           </h1>
         </header>
-        {turn !== 0 && (
+        {currentRoll !== 0 && (
           <DiceTray
             currentDice={currentDice}
             canReroll={canReroll}
