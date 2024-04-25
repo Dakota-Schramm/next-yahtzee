@@ -38,7 +38,7 @@ const FooterButtons = ({
     )
     // Turn 1 & 2
     case "playing.deciding": return (
-      <>
+      <div className="flex flex-row">
         <button 
           className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'
           onClick={handleReroll}
@@ -51,7 +51,7 @@ const FooterButtons = ({
         >
           Restart
         </button>
-      </>
+      </div>
     )
     // Turn 3
     case "FORCE SCORE": return (

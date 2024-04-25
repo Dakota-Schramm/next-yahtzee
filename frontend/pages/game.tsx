@@ -105,11 +105,12 @@ const Game: NextPage = () => {
             toggleDiceReroll={handleToggle}
           />
         )}
-        <footer className='flex items-center justify-center p-8'>
+        <footer className='flex flex-col items-center justify-center p-8'>
+          {0 < currentRoll && <div>Turn: {currentRoll}</div>}
           <FooterButtons
             currentState={stateMachine.value}
             currentRoll={currentRoll}
-            {...footerHandlers }
+            {...footerHandlers}
           />
         </footer>
       </section>
