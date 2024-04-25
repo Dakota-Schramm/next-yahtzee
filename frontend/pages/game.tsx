@@ -24,7 +24,6 @@ const Game: NextPage = () => {
   const {
     currentRoll,
     currentDice,
-    footerButtonId,
     upperSection: upper,
     lowerSection: lower,
   } = stateMachine.context;
@@ -107,7 +106,11 @@ const Game: NextPage = () => {
           />
         )}
         <footer className='flex items-center justify-center p-8'>
-          <FooterButtons currentId={footerButtonId} {...footerHandlers} />
+          <FooterButtons
+            currentState={stateMachine.value}
+            currentRoll={currentRoll}
+            {...footerHandlers }
+          />
         </footer>
       </section>
       <Scoreboard

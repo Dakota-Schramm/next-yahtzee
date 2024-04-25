@@ -1,5 +1,6 @@
 interface IFooterSection {
-  currentId: number;
+  currentState: string;
+  currentRoll: number;
   handleStart: () => void;
   handleReroll: () => void;
   handleRestart: () => void;
@@ -7,16 +8,25 @@ interface IFooterSection {
 }
 
 const FooterButtons = ({
-  currentId,
+  currentState,
+  currentRoll,
   handleStart, 
   handleReroll, 
   handleRestart, 
   handlePlayAgain
 }: IFooterSection) => {
   // Destructure currentId here
-  switch (currentId) {
+  let state = typeof currentState === "string"
+    ? currentState 
+    : `playing.${currentState["playing"]}`
+  
+  if (currentRoll === 3) {
+    state = "FORCE SCORE"
+  }
+
+  switch (state) {
     // Start
-    case 0: return (
+    case "welcome": return (
       <>
         <button 
           className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'
@@ -27,7 +37,7 @@ const FooterButtons = ({
       </>
     )
     // Turn 1 & 2
-    case 1: return (
+    case "playing.deciding": return (
       <>
         <button 
           className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'
@@ -44,13 +54,13 @@ const FooterButtons = ({
       </>
     )
     // Turn 3
-    case 2: return (
+    case "FORCE SCORE": return (
       <>
         <h5>Pick a score</h5>
       </>
     )
     // Scorecard is full
-    case 3: return (
+    case "gameover": return (
       <>
         <button 
           className='flex items-center justify-center p-4 mx-4 border border-gray-700 border-solid rounded-md h-11'
@@ -60,7 +70,7 @@ const FooterButtons = ({
         </button>
       </>
     )
-    default: throw Error('Footer button Id invalid') 
+    default: throw Error(`Footer button Id invalid ${currentState}`) 
   }
 }
 

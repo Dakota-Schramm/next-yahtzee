@@ -19,7 +19,6 @@ const YahtzeeMachine = createMachine(
     initial: 'welcome',
 
     context: {
-      footerButtonId: 0,
       currentDice: baseDice,
       currentRoll: 0,
       upperSection: structuredClone(upperSectionDict),
@@ -74,9 +73,9 @@ const YahtzeeMachine = createMachine(
   },
   {
     actions: {
-      initGame: assign((context) => {
+      initGame: assign(({ context }) => {
         return ({
-          ...context.context,
+          ...context,
           currentDice: baseDice,
           currentRoll: 0,
           footerButtonId: 0,
@@ -84,9 +83,9 @@ const YahtzeeMachine = createMachine(
           lowerSection: structuredClone(lowerSectionDict)
         })
       }),
-      initTurn: assign((context) => {
+      initTurn: assign(({ context }) => {
         return ({
-          ...context.context,
+          ...context,
           currentDice: baseDice,
           currentRoll: 0,
           footerButtonId: 1,
@@ -119,13 +118,16 @@ const YahtzeeMachine = createMachine(
       },
     },
     guards: {
-      canRoll: ({ context, event }) => {
+      canRoll: ({ context }) => {
         return context.currentRoll < 3
       },
-      isGameOver: ({ context, event }) => {
+      isGameOver: ({ context }) => {
         const check = scoreCardFilled(context) 
         console.log('hit', check)
         return check 
+      },
+      finalRollThrown: ({ context }) => {
+        return context.currentRoll === 3
       }
     }
   }
