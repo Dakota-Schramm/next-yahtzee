@@ -101,7 +101,12 @@ const Game: NextPage = () => {
           />
         )}
         <footer className='flex flex-col items-center justify-center p-8'>
-          {0 < currentRoll && <div>Turn: {currentRoll}</div>}
+          {0 < currentRoll && 
+            <div className='flex space-x-4'>
+              <div>Turn: {calculateTurn(stateMachine.context)}</div>
+              <div>Roll: {currentRoll}</div>
+            </div>
+          }
           <FooterButtons
             currentState={stateMachine.value}
             currentRoll={currentRoll}
@@ -120,6 +125,14 @@ const Game: NextPage = () => {
       />
     </section>
   );
+}
+
+function calculateTurn(context) {
+  const { upperSection, lowerSection } = context;
+  const upperFilled = Object.values(upperSection).filter(val => val !== undefined).length;
+  const lowerFilled = Object.values(lowerSection).filter(val => val !== undefined).length;
+
+  return upperFilled + lowerFilled + 1
 }
 
 export default Game 

@@ -74,6 +74,8 @@ const PlayerScores = () => (
   </header>
 );
 
+// TODO: Don't allow scoring if currentRoll isn't valid (in welcome state)
+// ? Might not need to change current behavior since state machine wont allow that transition in welcome??
 const Scoreboard = ({
   currentDice,
   upper,
