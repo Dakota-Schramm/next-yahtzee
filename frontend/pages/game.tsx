@@ -1,7 +1,5 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import React, { useEffect, useState, FC, useLayoutEffect, useReducer, useContext } from 'react';
+import React, { useEffect, } from 'react';
 
 import { upperSectionScores, lowerSectionScores } from '../constants';
 
@@ -9,8 +7,6 @@ import Scoreboard from '../components/Scoreboard';
 import DiceTray, { ICurrentDie } from '../components/DiceTray';
 import FooterButtons from '../components/Footer';
 
-import useGameMeta from '../hooks/useGameMeta';
-import type { IGameMeta } from '../hooks/useGameMeta';
 import { useMachine } from '@xstate/react';
 import YahtzeeMachine, { scoreCardFilled } from '~/game';
 
@@ -100,9 +96,8 @@ const Game: NextPage = () => {
         </header>
         {currentRoll !== 0 && (
           <DiceTray
-            currentDice={currentDice}
-            canReroll={canReroll}
             toggleDiceReroll={handleToggle}
+            {...{ currentDice, canReroll }}
           />
         )}
         <footer className='flex flex-col items-center justify-center p-8'>
@@ -115,7 +110,6 @@ const Game: NextPage = () => {
         </footer>
       </section>
       <Scoreboard
-        canSelectScores={!canReroll}
         {...{
           currentDice,
           upper,

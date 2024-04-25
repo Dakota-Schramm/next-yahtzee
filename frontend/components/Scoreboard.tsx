@@ -16,16 +16,14 @@ import Tooltip from './Tooltip';
 interface IScoreBox {
   title: string | number;
   value: number | undefined;
-  canSelectScores: boolean;
   onClick: () => void;
 }
 
-const ScoreBox = ({ title, value, canSelectScores, onClick }: IScoreBox) => {
+const ScoreBox = ({ title, value, onClick }: IScoreBox) => {
   return (
     <button 
       className='flex flex-col items-center justify-center min-w-36 p-2 bg-gray-100 border border-black border-solid disabled:outline-red-400 disabled:outline-4 disabled:outline'
       onClick={onClick}
-      disabled={!canSelectScores}
     >
       <header className='relative flex w-full justify-between'>
         <h5 className='text-3xl text-black text-center w-full'>{title}</h5>
@@ -52,7 +50,6 @@ const ScoreBoardSection = ({ children, title }: IScoreboardSection) => (
 
 interface IScoreboard {
   currentDice: ICurrentDie[];
-  canSelectScores: boolean;
   // gameTurn: number;
   // addScore: (type: string, column: number | string, value: number) => void;
   upper: IUpperSection;
@@ -79,7 +76,6 @@ const PlayerScores = () => (
 
 const Scoreboard = ({
   currentDice,
-  canSelectScores,
   upper,
   handleAddUpperScore,
   lower,
@@ -96,7 +92,6 @@ const Scoreboard = ({
             <ScoreBox
               title={key}
               value={value}
-              canSelectScores={canSelectScores}
               onClick={() => {
                 handleAddUpperScore(key, calculateScore(currentDice, key));
               }}
@@ -111,7 +106,6 @@ const Scoreboard = ({
             <ScoreBox
               title={key}
               value={value}
-              canSelectScores={canSelectScores}
               onClick={() => {
                 handleAddLowerScore(key, calculateScore(currentDice, key));
               }}
