@@ -204,7 +204,10 @@ function calculateScoreForSection(
 export function scoreCardFilled(context) {
   const { upperSection, lowerSection } = context;
   const upperFilled = !Object.values(upperSection).includes(undefined)
-  const lowerFilled = !Object.values(lowerSection).includes(undefined)
+  const lowerWithoutBonuses = Object.entries(lowerSection)
+    .filter(([key, value]) => key !== "Yahtzee! Bonuses")
+    .map(([key, value]) => value)
+  const lowerFilled = !lowerWithoutBonuses.includes(undefined)
 
   return upperFilled && lowerFilled
 }
