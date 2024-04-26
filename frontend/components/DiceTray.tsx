@@ -61,31 +61,27 @@ const Die = (
   );
 }
 
-const DiceTray = (
-  {currentDice, toggleDiceReroll, canReroll}: IDiceTray
-) => (
+const DiceTray = ({ currentDice, toggleDiceReroll, canReroll }: IDiceTray) => (
   <section className='flex relative'>
-    <div className='flex justify-center items-center absolute -left-20 top-4'>
-      <CgGlassAlt /><span className='uppercase font-bold'>Cup</span>
+    <div className='flex justify-center items-center absolute left-[-70px] top-4 bg-white rounded-lg p-1 text-red-500'>
+      <CgGlassAlt />
+      <span className='uppercase font-bold'>Cup</span>
     </div>
-    <div className='flex justify-center items-center absolute -left-20 bottom-4'>
-      <PiTrayLight /><span className='uppercase font-bold'>Tray</span>
+    <div className='flex justify-center items-center absolute -left-20 bottom-4 bg-white rounded-lg p-1 text-red-500'>
+      <PiTrayLight />
+      <span className='uppercase font-bold'>Tray</span>
     </div>
     <div className='flex flex-row space-x-4'>
-      {
-        currentDice.map(
-          (diceObj, diceNum) => (
-            <Die 
-              onClick={() => {
-                toggleDiceReroll(diceNum)
-              }}
-              face={diceObj.face}
-              isDisabled={!canReroll}
-              location={diceObj.location}
-            />
-          )
-        )
-      }
+      {currentDice.map((diceObj, diceNum) => (
+        <Die
+          onClick={() => {
+            toggleDiceReroll(diceNum);
+          }}
+          face={diceObj.face}
+          isDisabled={!canReroll}
+          location={diceObj.location}
+        />
+      ))}
     </div>
   </section>
 );
