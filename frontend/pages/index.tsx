@@ -11,19 +11,21 @@ import Title from '~/components/Title';
 const Home: NextPage = () => {
   return (
     // Have main screen that lets you navigate to scores, exit and play
-    <section className='flex flex-col items-center justify-around w-screen h-screen bg-blue-300'>
-      <header className='flex flex-col items-center justify-center'>
-        <Title />
-        <h2 className='mt-16'>Written by Dakota Schramm</h2>
-      </header>
-      <section className='flex justify-center items-between'>
-        <Link href='/game'>
-          <button className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'>
-            <GiRollingDiceCup /> <span className='ml-4'>Play</span>
-          </button>
-        </Link>
+    <div className="w-screen h-screen bg-blue-300 flex items-center justify-center">
+      <section className='flex flex-col items-center justify-around container bg-blue-500 w-full h-full'>
+        <header className='flex flex-col items-center justify-center'>
+          <Title />
+          <h2 className='mt-16'>Written by Dakota Schramm</h2>
+        </header>
+        <section className='flex justify-center items-between'>
+          <Link href='/game'>
+            <button className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11 border-white border'>
+              <GiRollingDiceCup /> <span className='ml-4'>Play</span>
+            </button>
+          </Link>
+        </section>
       </section>
-    </section>
+    </div>
   );
 }
 
