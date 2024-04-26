@@ -148,7 +148,7 @@ function rerollDice(dice: ICurrentDie[]) {
       if (!shouldReroll) return prevRoll;
 
       const newRoll = Math.floor(Math.random() * 6 + 1);
-      return ({ ...prevRoll, face: 6 }) 
+      return ({ ...prevRoll, face: newRoll }) 
   })
 }
 
