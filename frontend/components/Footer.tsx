@@ -56,7 +56,12 @@ const FooterButtons = ({
       <div className="flex flex-row">
         <button 
           className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'
-          onClick={handleReroll}
+          onClick={() => {
+            var snd = new Audio("sounds/roll.wav"); // buffers automatically when created
+            if (enabled) snd.play();
+
+            handleReroll()
+          }}
         >
           <GiRollingDiceCup /><span className="ml-4">Reroll</span>
         </button>
