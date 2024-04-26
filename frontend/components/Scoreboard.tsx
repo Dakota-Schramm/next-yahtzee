@@ -7,6 +7,8 @@ import {
   useContext,
 } from 'react';
 
+import { GiCheckMark } from "react-icons/gi";
+
 import { ILowerSection, IUpperSection } from '~/pages/game';
 import { initialScore } from '~/hooks/useGameMeta';
 import { ICurrentDie } from './DiceTray';
@@ -21,22 +23,36 @@ interface IScoreBox {
   onClick: () => void;
 }
 
-const ScoreValue = ({ canSelect, isHovered, value, potentialScore }: {
+const ScoreValue = ({ title, canSelect, isHovered, value, potentialScore }: {
   canSelect: boolean;
   isHovered: boolean;
+  title: string | number;
   value: number | undefined;
   potentialScore: number;
 }) => {
-  let toDisplay: string | number = "-";
-  if (canSelect) {
-    if (value || value === 0) {
-      toDisplay = value
-    } else if (isHovered){
-      toDisplay = potentialScore
-    } 
-  }
+  if (title === "Yahtzee! Bonuses") {
+    const numOfBonuses = value / 100 
 
-  return <span>{toDisplay}</span>
+    const checkmarks = []
+    for (let i=0; i<numOfBonuses; i++) {
+      checkmarks.push(<GiCheckMark />)
+    }
+
+    return (
+      <span className='flex min-h-4'>{checkmarks}</span>
+    );
+  } else {
+    let toDisplay: string | number = "-";
+    if (canSelect) {
+      if (value || value === 0) {
+        toDisplay = value
+      } else if (isHovered){
+        toDisplay = potentialScore
+      } 
+    }
+
+    return <span>{toDisplay}</span>
+  }
 }
 
 const ScoreBox = ({ canSelect, title, value, potentialScore, onClick }: IScoreBox) => {
@@ -59,7 +75,7 @@ const ScoreBox = ({ canSelect, title, value, potentialScore, onClick }: IScoreBo
           <Tooltip {...{tooltipText}} />
         </div>
       </header>
-      <ScoreValue {...{ canSelect, isHovered, potentialScore, value }}/>
+      <ScoreValue {...{ title, canSelect, isHovered, potentialScore, value }}/>
     </button>
   );
 }
@@ -95,6 +111,8 @@ const PlayerScores = ({
   lower: ILowerSection;
 }) => {
   const [highScore, setHighScore] = useState(0);
+  // TODO: Add boolean here to check if game is on first turn,
+  // Add to dep array for effect
 
   useEffect(() => {
     const score = localStorage.getItem("highScore");
@@ -139,7 +157,6 @@ const Scoreboard = ({
     lowerScores[key] = getScoreForLowerSection(currentDice, key)
   }
 
-
   return (
     <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
       <PlayerScores {...{ upper, lower }} />
@@ -160,25 +177,66 @@ const Scoreboard = ({
             ))}
           </section>
         </ScoreBoardSection>
-        {/* Lower */}
-        <ScoreBoardSection title='Lower Section'>
-          <section className='grid grid-cols-4 grid-rows-2 gap-x-4 gap-y-24'>
-            {Object.entries(lower).map(([key, value]) => (
-              <ScoreBox
-                title={key}
-                potentialScore={lowerScores[key]}
-                onClick={() => {
-                  handleAddLowerScore(key, lowerScores[key]);
-                }}
-                { ...{ canSelect, value }}
-              />
-            ))}
-          </section>
-        </ScoreBoardSection>
+        <LowerScoreBoard
+          {...{ lower, lowerScores, handleAddLowerScore, canSelect }}
+
+        />
       </div>
     </section>
   );
 }
+
+function LowerScoreBoard({
+  lower,
+  lowerScores,
+  handleAddLowerScore,
+  canSelect,
+}) {
+  const yahtzeeScore = lower["Yahtzee!"]
+  const yahtzeeBonusScore = lower["Yahtzee! Bonuses"]
+  const isBonusSelectable = yahtzeeScore === 50 && yahtzeeBonusScore < 300;
+
+  const scoreBoxProps = (key, value) => {
+    return ({
+      title: key,
+      value: value,
+      potentialScore: lowerScores[key]
+    })
+  }
+
+  return (
+    <ScoreBoardSection title='Lower Section'>
+      <section className='grid grid-cols-4 grid-rows-2 gap-x-4 gap-y-24'>
+        {Object.entries(lower).map(([key, value]) => {
+          if (key === "Yahtzee! Bonuses") {
+
+            return (
+              <ScoreBox
+                canSelect={isBonusSelectable}
+                onClick={() => {
+                  handleAddLowerScore(key, lowerScores[key]);
+                }}
+                { ...scoreBoxProps(key, value) }
+              />
+            )
+          } else {
+            return (
+              <ScoreBox
+                onClick={() => {
+                  handleAddLowerScore(key, lowerScores[key]);
+                }}
+                { ...scoreBoxProps(key, value) }
+                {...{ canSelect }}
+              />
+            )
+          }
+        })}
+      </section>
+    </ScoreBoardSection>
+  )
+}
+
+///
 
 function calculateScore(currentDice: ICurrentDie[], type: string | number) {
   if (typeof type === 'number')
@@ -262,9 +320,16 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
       return isLargeStraight ? 40 : 0;
     }
     case 'Yahtzee!': {
+      // Add way to bring in scored yahtzees here and add scores appropriately
+      // Add special case for scorebox on yahtzees ==> Show red check marks for each yahtzee
       const hasMatch = Object.values(counts).find((ele: number) => ele === 5);
 
       return hasMatch ? 50 : 0;
+    }
+    case 'Yahtzee! Bonuses': {
+      const hasMatch = Object.values(counts).find((ele: number) => ele === 5);
+
+      return hasMatch ? 100 : 0;
     }
     default: {
       // Chance

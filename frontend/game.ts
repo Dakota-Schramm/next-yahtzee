@@ -23,7 +23,7 @@ const YahtzeeMachine = createMachine(
       currentDice: baseDice,
       currentRoll: 0,
       upperSection: structuredClone(upperSectionDict),
-      lowerSection: structuredClone(lowerSectionDict)
+      lowerSection: structuredClone(lowerSectionDict),
     },
 
     states: {
@@ -148,7 +148,7 @@ function rerollDice(dice: ICurrentDie[]) {
       if (!shouldReroll) return prevRoll;
 
       const newRoll = Math.floor(Math.random() * 6 + 1);
-      return ({ ...prevRoll, face: newRoll }) 
+      return ({ ...prevRoll, face: 6 }) 
   })
 }
 
@@ -178,7 +178,18 @@ function calculateScoreForSection(
   if (upperSectionChosen) {
     scores.upperSection[sectionToScore] = score
   } else if (lowerSectionChosen) {
-    scores.lowerSection[sectionToScore] = score
+    let calculatedScore = score;
+    if (
+      sectionToScore === "Yahtzee! Bonuses" &&
+      scores.lowerSection[sectionToScore] < 300
+    ) {
+      calculatedScore += scores.lowerSection[sectionToScore]
+      scores.lowerSection[sectionToScore] = calculatedScore;
+    } else if (
+      sectionToScore !== "Yahtzee! Bonuses"
+    ) {
+      scores.lowerSection[sectionToScore] = calculatedScore;
+    }
   } else {
     console.log("Neither: ", Object.keys(upperSection), sectionToScore)
   }

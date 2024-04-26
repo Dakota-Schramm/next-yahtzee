@@ -36,6 +36,7 @@ export const lowerSectionScores: Score ={
   "Small Straight": "Four sequential dice - Ex. [1, 2, 3, 4]",
   "Large Straight": "Five sequential dice - Ex. [1, 2, 3, 4, 5]",
   "Yahtzee!": "Five of a kind - all dice have the same face",
+  "Yahtzee! Bonuses": "Bonuses assigned for yahtzees past the first",
   "Chance": "Sum of all dice"
 }
 
@@ -44,3 +45,4 @@ export const lowerSectionDict: ILowerSection = Object.assign(
     x => ({ [x]: undefined })
   )
 );
+lowerSectionDict["Yahtzee! Bonuses"] = 0
