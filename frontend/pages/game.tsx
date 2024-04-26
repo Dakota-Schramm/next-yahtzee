@@ -85,7 +85,7 @@ const Game: NextPage = () => {
   return (
     // Have main screen that lets you navigate to scores, exit and play
     <SoundProvider>
-      <section className='flex w-screen h-screen bg-[#d01014]'>
+      <section className='flex w-screen h-screen bg-[#d01014] text-white'>
         <section className='flex flex-col items-center justify-between w-full h-full '>
           <GameHeader />
           {currentRoll !== 0 && (

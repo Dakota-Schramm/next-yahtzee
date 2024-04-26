@@ -163,7 +163,7 @@ const Scoreboard = ({
   }
 
   return (
-    <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
+    <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black text-red-700'>
       <PlayerScores {...{ upper, lower }} />
 
       <div className='flex flex-col items-center justify-center h-full space-y-24'>
