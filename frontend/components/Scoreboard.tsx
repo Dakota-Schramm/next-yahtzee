@@ -14,6 +14,7 @@ import { initialScore } from '~/hooks/useGameMeta';
 import { ICurrentDie } from './DiceTray';
 import Tooltip from './Tooltip';
 import { lowerSectionScores, upperSectionScores } from '~/constants';
+import { SoundContext } from '~/contexts/sound';
 
 interface IScoreBox {
   canSelect: boolean;
@@ -147,6 +148,9 @@ const Scoreboard = ({
   lower,
   handleAddLowerScore,
 }: IScoreboard) => {
+  const { enabled, setEnabled } = useContext(SoundContext);
+  var snd = new Audio("sounds/select_score.wav"); // buffers automatically when created
+
   let upperScores = structuredClone(upper);
   for (let key in upperScores) {
     upperScores[key] = getScoreForUpperSection(currentDice, Number(key))
@@ -170,6 +174,7 @@ const Scoreboard = ({
                 title={key}
                 potentialScore={upperScores[key]}
                 onClick={() => {
+                  if (enabled) snd.play();
                   handleAddUpperScore(key, upperScores[key]);
                 }}
                 {...{ canSelect, value }}
@@ -191,6 +196,10 @@ function LowerScoreBoard({
   handleAddLowerScore,
   canSelect,
 }) {
+  const { enabled, setEnabled } = useContext(SoundContext);
+  var snd = new Audio("sounds/select_score.wav"); // buffers automatically when created
+  var yahtzeeSnd = new Audio("sounds/yahtzee.wav"); // buffers automatically when created
+
   const yahtzeeScore = lower["Yahtzee!"]
   const yahtzeeBonusScore = lower["Yahtzee! Bonuses"]
   const isBonusSelectable = yahtzeeScore === 50 && yahtzeeBonusScore < 300;
@@ -208,20 +217,32 @@ function LowerScoreBoard({
       <section className='grid grid-cols-4 grid-rows-2 gap-x-8 gap-y-8'>
         {Object.entries(lower).map(([key, value]) => {
           if (key === "Yahtzee! Bonuses") {
-
             return (
               <ScoreBox
                 canSelect={isBonusSelectable}
                 onClick={() => {
+                  if (enabled) yahtzeeSnd.play();
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
                 { ...scoreBoxProps(key, value) }
+              />
+            )
+          } else if (key === "Yahtzee!") {
+            return (
+              <ScoreBox
+                onClick={() => {
+                  if (enabled && lowerScores[key]) yahtzeeSnd.play();
+                  handleAddLowerScore(key, lowerScores[key]);
+                }}
+                { ...scoreBoxProps(key, value) }
+                {...{ canSelect }}
               />
             )
           } else {
             return (
               <ScoreBox
                 onClick={() => {
+                  if (enabled) snd.play();
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
                 { ...scoreBoxProps(key, value) }
