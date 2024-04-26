@@ -11,6 +11,8 @@ import { ILowerSection, IUpperSection } from '~/pages/game';
 import { initialScore } from '~/hooks/useGameMeta';
 import { ICurrentDie } from './DiceTray';
 import Tooltip from './Tooltip';
+import { lowerSectionScores, upperSectionScores } from '~/constants';
+
 
 
 interface IScoreBox {
@@ -34,6 +36,10 @@ const ScoreValue = ({ isHovered, value, potentialScore }) => {
 const ScoreBox = ({ title, value, potentialScore, onClick }: IScoreBox) => {
   const [isHovered, setIsHovered] = useState(false)
 
+  const tooltipText = Object.keys(upperSectionScores).includes(title)
+    ? upperSectionScores[title]
+    : lowerSectionScores[title]
+
   return (
     <button 
       className='flex flex-col items-center justify-center p-2 bg-gray-100 border border-black border-solid min-w-36 disabled:outline-red-400 disabled:outline-4 disabled:outline'
@@ -44,7 +50,7 @@ const ScoreBox = ({ title, value, potentialScore, onClick }: IScoreBox) => {
       <header className='relative flex justify-between w-full'>
         <h5 className='w-full text-3xl text-center text-black'>{title}</h5>
         <div className='absolute top-0 right-0 flex justify-end w-full'>
-          <Tooltip tooltipText='Insert info about rules here'/>
+          <Tooltip {...{tooltipText}} />
         </div>
       </header>
       <ScoreValue {...{ isHovered, potentialScore, value }}/>
