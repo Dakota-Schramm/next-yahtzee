@@ -129,7 +129,6 @@ const Scoreboard = ({
     lowerScores[key] = getScoreForLowerSection(currentDice, key)
   }
 
-  console.log({ upperScores, lowerScores })
 
   return (
     <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
@@ -145,7 +144,6 @@ const Scoreboard = ({
                 value={value}
                 potentialScore={upperScores[key]}
                 onClick={() => {
-                  console.log("HIT UPPER")
                   handleAddUpperScore(key, upperScores[key]);
                 }}
               />
@@ -161,7 +159,6 @@ const Scoreboard = ({
                 value={value}
                 potentialScore={lowerScores[key]}
                 onClick={() => {
-                  console.log("HIT LOWER")
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
               />
