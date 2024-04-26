@@ -13,8 +13,6 @@ import { ICurrentDie } from './DiceTray';
 import Tooltip from './Tooltip';
 import { lowerSectionScores, upperSectionScores } from '~/constants';
 
-
-
 interface IScoreBox {
   title: string | number;
   value: number | undefined;
@@ -24,7 +22,7 @@ interface IScoreBox {
 
 const ScoreValue = ({ isHovered, value, potentialScore }) => {
   let toDisplay = "-";
-  if (value) {
+  if (value || value === 0) {
     toDisplay = value
   } else if (isHovered){
     toDisplay = potentialScore
@@ -86,21 +84,31 @@ const PlayerScores = ({
 }: {
   upper: IUpperSection;
   lower: ILowerSection;
-}) => (
-  <header className='flex flex-col items-center justify-start w-full p-4'>
-    <h3 className='text-3xl'>Scoreboard</h3>
-    <section className='flex justify-between w-full'>
-      <span className='flex flex-col items-center justify-center'>
-        <h5>Current Score: </h5>
-        {calculateCurrentScore(upper, lower)}
-      </span>
-      <span className='flex flex-col items-center justify-center'>
-        <h5>Top Score: </h5>
-        {0}
-      </span>
-    </section>
-  </header>
-);
+}) => {
+  const [highScore, setHighScore] = useState(0);
+
+  useEffect(() => {
+    const score = localStorage.getItem("highScore");
+    if (!score) return
+    setHighScore(Number(score))
+  }, []);
+
+  return (
+    <header className='flex flex-col items-center justify-start w-full p-4'>
+      <h3 className='text-3xl'>Scoreboard</h3>
+      <section className='flex justify-between w-full'>
+        <span className='flex flex-col items-center justify-center'>
+          <h5>Current Score: </h5>
+          {calculateCurrentScore(upper, lower)}
+        </span>
+        <span className='flex flex-col items-center justify-center'>
+          <h5>Top Score: </h5>
+          {highScore}
+        </span>
+      </section>
+    </header>
+  );
+}
 
 // TODO: Don't allow scoring if currentRoll isn't valid (in welcome state)
 // ? Might not need to change current behavior since state machine wont allow that transition in welcome??
@@ -137,6 +145,7 @@ const Scoreboard = ({
                 value={value}
                 potentialScore={upperScores[key]}
                 onClick={() => {
+                  console.log("HIT UPPER")
                   handleAddUpperScore(key, upperScores[key]);
                 }}
               />
@@ -152,6 +161,7 @@ const Scoreboard = ({
                 value={value}
                 potentialScore={lowerScores[key]}
                 onClick={() => {
+                  console.log("HIT LOWER")
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
               />
@@ -259,7 +269,7 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
   }
 }
 
-function calculateCurrentScore(upperSection, lowerSection) {
+export function calculateCurrentScore(upperSection, lowerSection) {
   let score = 0;
   for (let key in upperSection) {
     if (!upperSection[key]) continue 

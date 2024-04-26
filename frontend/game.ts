@@ -2,6 +2,7 @@ import { createMachine, assign } from 'xstate';
 import { lowerSectionDict, numOfDice, upperSectionDict, upperSectionScores, lowerSectionScores } from './constants';
 
 import { type ICurrentDie } from "~/components/DiceTray";
+import { calculateCurrentScore } from './components/Scoreboard';
 
 /*
     TO CONSIDER
@@ -113,8 +114,11 @@ const YahtzeeMachine = createMachine(
           footerButtonId: 3
         })
       }),
-      getFinalScore: () => {
-        return 0
+      getFinalScore: ({ context, }) => {
+        const { upperSection, lowerSection } = context;
+        const score = calculateCurrentScore(upperSection, lowerSection)
+        localStorage.setItem("highScore", `${score}`)
+        alert(score)
       },
     },
     guards: {
