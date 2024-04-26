@@ -22,6 +22,7 @@ interface IScoreBox {
   value: number | undefined;
   potentialScore: number;
   onClick: () => void;
+  disabled: boolean;
 }
 
 const ScoreValue = ({ title, canSelect, isHovered, value, potentialScore }: {
@@ -56,7 +57,7 @@ const ScoreValue = ({ title, canSelect, isHovered, value, potentialScore }: {
   }
 }
 
-const ScoreBox = ({ canSelect, title, value, potentialScore, onClick }: IScoreBox) => {
+const ScoreBox = ({ canSelect, title, value, potentialScore, ...props }: IScoreBox) => {
   const [isHovered, setIsHovered] = useState(false)
 
   const tooltipText = Object.keys(upperSectionScores).includes(title)
@@ -66,9 +67,9 @@ const ScoreBox = ({ canSelect, title, value, potentialScore, onClick }: IScoreBo
   return (
     <button 
       className='flex flex-col items-center justify-center p-2 bg-gray-100 border border-black border-solid min-w-36 rounded-lg '
-      onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      {...props}
     >
       <header className='relative flex justify-between w-full'>
         <h5 className='w-full text-3xl text-center text-black'>{title}</h5>
@@ -173,6 +174,7 @@ const Scoreboard = ({
               <ScoreBox
                 title={key}
                 potentialScore={upperScores[key]}
+                disabled={value !== undefined && 0 <= value}
                 onClick={() => {
                   if (enabled) snd.play();
                   handleAddUpperScore(key, upperScores[key]);
@@ -224,6 +226,7 @@ function LowerScoreBoard({
                   if (enabled) yahtzeeSnd.play();
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
+                disabled={value !== undefined && 0 <= value}
                 { ...scoreBoxProps(key, value) }
               />
             )
@@ -234,6 +237,7 @@ function LowerScoreBoard({
                   if (enabled && lowerScores[key]) yahtzeeSnd.play();
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
+                disabled={value !== undefined && 0 <= value}
                 { ...scoreBoxProps(key, value) }
                 {...{ canSelect }}
               />
@@ -245,6 +249,7 @@ function LowerScoreBoard({
                   if (enabled) snd.play();
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
+                disabled={value !== undefined && 0 <= value}
                 { ...scoreBoxProps(key, value) }
                 {...{ canSelect }}
               />
