@@ -9,6 +9,7 @@ import FooterButtons from '../components/Footer';
 
 import { useMachine } from '@xstate/react';
 import YahtzeeMachine, { scoreCardFilled } from '~/game';
+import Title from '~/components/Title';
 
 /*
   TODO:
@@ -90,9 +91,7 @@ const Game: NextPage = () => {
     <section className='flex w-screen h-screen'>
       <section className='flex flex-col items-center justify-between w-full h-full bg-[#d01014]'>
         <header className='p-8'>
-          <h1 className='text-8xl font-revueStd text-white -skew-y-6'>
-            Yahtzee!
-          </h1>
+          <Title />
         </header>
         {currentRoll !== 0 && (
           <DiceTray
