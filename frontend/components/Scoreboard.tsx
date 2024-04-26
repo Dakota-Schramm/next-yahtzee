@@ -64,7 +64,7 @@ const ScoreBox = ({ canSelect, title, value, potentialScore, onClick }: IScoreBo
 
   return (
     <button 
-      className='flex flex-col items-center justify-center p-2 bg-gray-100 border border-black border-solid min-w-36 disabled:outline-red-400 disabled:outline-4 disabled:outline'
+      className='flex flex-col items-center justify-center p-2 bg-gray-100 border border-black border-solid min-w-36 rounded-lg '
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -87,7 +87,7 @@ interface IScoreboardSection {
 
 const ScoreBoardSection = ({ children, title }: IScoreboardSection) => (
   <section className='flex flex-col items-center justify-between w-full p-2'>
-    <h3 className='uppercase'>{title}</h3>
+    <h3 className='uppercase font-revueStd'>{title}</h3>
     {children}
   </section>
 );
@@ -121,7 +121,7 @@ const PlayerScores = ({
   }, []);
 
   return (
-    <header className='flex flex-col items-center justify-start w-full p-4'>
+    <header className='flex flex-col items-center justify-start w-full p-4 font-revueStd'>
       <h3 className='text-3xl'>Scoreboard</h3>
       <section className='flex justify-between w-full'>
         <span className='flex flex-col items-center justify-center'>
@@ -161,10 +161,10 @@ const Scoreboard = ({
     <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
       <PlayerScores {...{ upper, lower }} />
 
-      <div className='flex flex-col items-center justify-between h-full'>
+      <div className='flex flex-col items-center justify-center h-full space-y-24'>
         {/* Upper  */}
         <ScoreBoardSection title='Upper Section'>
-          <section className='grid grid-cols-3 grid-rows-2 gap-x-8 gap-y-24'>
+          <section className='grid grid-cols-3 grid-rows-2 gap-x-8 gap-y-8'>
             {Object.entries(upper).map(([key, value]) => (
               <ScoreBox
                 title={key}
@@ -172,14 +172,13 @@ const Scoreboard = ({
                 onClick={() => {
                   handleAddUpperScore(key, upperScores[key]);
                 }}
-                { ...{ canSelect, value }}
+                {...{ canSelect, value }}
               />
             ))}
           </section>
         </ScoreBoardSection>
         <LowerScoreBoard
           {...{ lower, lowerScores, handleAddLowerScore, canSelect }}
-
         />
       </div>
     </section>
@@ -206,7 +205,7 @@ function LowerScoreBoard({
 
   return (
     <ScoreBoardSection title='Lower Section'>
-      <section className='grid grid-cols-4 grid-rows-2 gap-x-4 gap-y-24'>
+      <section className='grid grid-cols-4 grid-rows-2 gap-x-8 gap-y-8'>
         {Object.entries(lower).map(([key, value]) => {
           if (key === "Yahtzee! Bonuses") {
 

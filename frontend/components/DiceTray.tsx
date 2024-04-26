@@ -34,24 +34,29 @@ const Die = (
   }[face]
 
   return (
-    <button 
+    <button
       className={
-        'w-16 h-16 lg:w-24 lg:h-24 cursor-pointer relative ' + 
+        'w-16 h-16 lg:w-24 lg:h-24 cursor-pointer relative drop-shadow-lg ' +
         `${shouldReroll ? '-top-12 ' : 'top-12 '} ` +
-        `${isDisabled ? '' : 'hover:outline hover:outline-4 hover:outline-solid hover:outline-blue-400'}`
+        `${
+          isDisabled
+            ? ''
+            : 'hover:outline hover:outline-4 hover:outline-solid hover:outline-blue-400'
+        }`
       }
       onClick={onClick}
       disabled={isDisabled}
     >
-      <img 
+      <img
         src={`/dice/dice-six-faces-${faceToNumber}.svg`}
-        alt="Current dice face" 
+        alt='Current dice face'
       />
       <div
         className={
-          'inset z-10 opacity-50 w-full h-full absolute top-0 left-0 ' + 
+          'inset z-10 opacity-50 w-full h-full absolute top-0 left-0 ' +
           `${shouldReroll ? '' : 'bg-gray-700 '} `
-        } />
+        }
+      />
     </button>
   );
 }

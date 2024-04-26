@@ -11,11 +11,6 @@ import { useMachine } from '@xstate/react';
 import YahtzeeMachine, { scoreCardFilled } from '~/game';
 import Title from '~/components/Title';
 
-/*
-  TODO:
-  - Change game loop to allow scoring before last turn
-*/
-
 const Game: NextPage = () => {
   const [stateMachine, send] = useMachine(YahtzeeMachine);
   const {
@@ -24,12 +19,6 @@ const Game: NextPage = () => {
     upperSection: upper,
     lowerSection: lower,
   } = stateMachine.context;
-
-  // const {currentDice, turn, footerButtonId, upper, lower } = gameMeta || {} as IGameMeta;
-
-  useEffect(() => {
-    console.log({ value: stateMachine.value, context: stateMachine.context })
-  }, [stateMachine.context, stateMachine.value]);
 
   function handleStart() {
     send({ type: "START" })
