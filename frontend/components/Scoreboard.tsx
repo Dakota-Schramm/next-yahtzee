@@ -16,22 +16,38 @@ import Tooltip from './Tooltip';
 interface IScoreBox {
   title: string | number;
   value: number | undefined;
+  potentialScore: number;
   onClick: () => void;
 }
 
-const ScoreBox = ({ title, value, onClick }: IScoreBox) => {
+const ScoreValue = ({ isHovered, value, potentialScore }) => {
+  let toDisplay = "-";
+  if (value) {
+    toDisplay = value
+  } else if (isHovered){
+    toDisplay = potentialScore
+  } 
+
+  return <span>{toDisplay}</span>
+}
+
+const ScoreBox = ({ title, value, potentialScore, onClick }: IScoreBox) => {
+  const [isHovered, setIsHovered] = useState(false)
+
   return (
     <button 
-      className='flex flex-col items-center justify-center min-w-36 p-2 bg-gray-100 border border-black border-solid disabled:outline-red-400 disabled:outline-4 disabled:outline'
+      className='flex flex-col items-center justify-center p-2 bg-gray-100 border border-black border-solid min-w-36 disabled:outline-red-400 disabled:outline-4 disabled:outline'
       onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <header className='relative flex w-full justify-between'>
-        <h5 className='text-3xl text-black text-center w-full'>{title}</h5>
-        <div className='w-full absolute top-0 right-0 flex justify-end'>
+      <header className='relative flex justify-between w-full'>
+        <h5 className='w-full text-3xl text-center text-black'>{title}</h5>
+        <div className='absolute top-0 right-0 flex justify-end w-full'>
           <Tooltip tooltipText='Insert info about rules here'/>
         </div>
       </header>
-      {value ?? '—'}
+      <ScoreValue {...{ isHovered, potentialScore, value }}/>
     </button>
   );
 }
@@ -82,42 +98,58 @@ const Scoreboard = ({
   handleAddUpperScore,
   lower,
   handleAddLowerScore,
-}: IScoreboard) => (
-  <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
-    <PlayerScores />
+}: IScoreboard) => {
+  let upperScores = structuredClone(upper);
+  for (let key in upperScores) {
+    upperScores[key] = getScoreForUpperSection(currentDice, Number(key))
+  }
 
-    <div className='flex flex-col justify-between items-center h-full'>
-      {/* Upper  */}
-      <ScoreBoardSection title='Upper Section'>
-        <section className='grid grid-cols-3 grid-rows-2 gap-x-8 gap-y-24'>
-          {Object.entries(upper).map(([key, value]) => (
-            <ScoreBox
-              title={key}
-              value={value}
-              onClick={() => {
-                handleAddUpperScore(key, calculateScore(currentDice, key));
-              }}
-            />
-          ))}
-        </section>
-      </ScoreBoardSection>
-      {/* Lower */}
-      <ScoreBoardSection title='Lower Section'>
-        <section className='grid grid-cols-4 grid-rows-2 gap-x-4 gap-y-24'>
-          {Object.entries(lower).map(([key, value]) => (
-            <ScoreBox
-              title={key}
-              value={value}
-              onClick={() => {
-                handleAddLowerScore(key, calculateScore(currentDice, key));
-              }}
-            />
-          ))}
-        </section>
-      </ScoreBoardSection>
-    </div>
-  </section>
-);
+  let lowerScores = structuredClone(lower);
+  for (let key in lowerScores) {
+    lowerScores[key] = getScoreForLowerSection(currentDice, key)
+  }
+
+  console.log({ upperScores, lowerScores })
+
+  return (
+    <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
+      <PlayerScores />
+
+      <div className='flex flex-col items-center justify-between h-full'>
+        {/* Upper  */}
+        <ScoreBoardSection title='Upper Section'>
+          <section className='grid grid-cols-3 grid-rows-2 gap-x-8 gap-y-24'>
+            {Object.entries(upper).map(([key, value]) => (
+              <ScoreBox
+                title={key}
+                value={value}
+                potentialScore={upperScores[key]}
+                onClick={() => {
+                  handleAddUpperScore(key, upperScores[key]);
+                }}
+              />
+            ))}
+          </section>
+        </ScoreBoardSection>
+        {/* Lower */}
+        <ScoreBoardSection title='Lower Section'>
+          <section className='grid grid-cols-4 grid-rows-2 gap-x-4 gap-y-24'>
+            {Object.entries(lower).map(([key, value]) => (
+              <ScoreBox
+                title={key}
+                value={value}
+                potentialScore={lowerScores[key]}
+                onClick={() => {
+                  handleAddLowerScore(key, lowerScores[key]);
+                }}
+              />
+            ))}
+          </section>
+        </ScoreBoardSection>
+      </div>
+    </section>
+  );
+}
 
 function calculateScore(currentDice: ICurrentDie[], type: string | number) {
   if (typeof type === 'number')
