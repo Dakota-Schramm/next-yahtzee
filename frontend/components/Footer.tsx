@@ -60,7 +60,7 @@ const FooterButtons = ({
       </>
     )
     // Scorecard is full
-    case "gameover": return (
+    case "playing.gameover": return (
       <>
         <button 
           className='flex items-center justify-center p-4 mx-4 border border-gray-700 border-solid rounded-md h-11'
@@ -70,7 +70,7 @@ const FooterButtons = ({
         </button>
       </>
     )
-    default: throw Error(`Footer button Id invalid ${currentState}`) 
+    default: throw Error(`Footer button Id invalid ${JSON.stringify(currentState)}`) 
   }
 }
 
