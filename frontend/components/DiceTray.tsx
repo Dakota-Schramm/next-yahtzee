@@ -24,17 +24,34 @@ const Die = (
 ) => {
   const shouldReroll = location === "cup";
 
+  const faceToNumber = {
+    1: "one",
+    2: "two",
+    3: "three",
+    4: "four",
+    5: "five",
+    6: "six"
+  }[face]
+
   return (
     <button 
       className={
-        'border border-solid border-black rounded-xl w-16 h-16 lg:w-24 lg:h-24 cursor-pointer relative ' + 
-        `${shouldReroll ? 'bg-white text-black -top-12 ' : 'bg-gray-700 text-white top-12 '} ` +
+        'w-16 h-16 lg:w-24 lg:h-24 cursor-pointer relative ' + 
+        `${shouldReroll ? '-top-12 ' : 'top-12 '} ` +
         `${isDisabled ? '' : 'hover:outline hover:outline-4 hover:outline-solid hover:outline-blue-400'}`
       }
       onClick={onClick}
       disabled={isDisabled}
     >
-      <span className='flex items-center justify-center w-full h-full'>{face}</span>
+      <img 
+        src={`/dice/dice-six-faces-${faceToNumber}.svg`}
+        alt="Current dice face" 
+      />
+      <div
+        className={
+          'inset z-10 opacity-50 w-full h-full absolute top-0 left-0 ' + 
+          `${shouldReroll ? '' : 'bg-gray-700 '} `
+        } />
     </button>
   );
 }
