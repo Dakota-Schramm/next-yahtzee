@@ -2,6 +2,8 @@ import { FaPlay } from "react-icons/fa";
 import { GiRollingDiceCup } from "react-icons/gi";
 import { VscDebugRestart } from "react-icons/vsc";
 import { MdReplay } from "react-icons/md";
+import { useContext } from "react";
+import { SoundContext } from "~/contexts/sound";
 
 
 
@@ -22,7 +24,8 @@ const FooterButtons = ({
   handleRestart, 
   handlePlayAgain
 }: IFooterSection) => {
-  // Destructure currentId here
+  const { enabled } = useContext(SoundContext);
+
   let state = typeof currentState === "string"
     ? currentState 
     : `playing.${currentState["playing"]}`
@@ -37,7 +40,12 @@ const FooterButtons = ({
       <>
         <button 
           className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'
-          onClick={handleStart}
+          onClick={()=> {
+            var snd = new Audio("sounds/start.wav"); // buffers automatically when created
+            if (enabled) snd.play();
+            
+            handleStart()
+          }}
         >
           <FaPlay /><span className="ml-4">Start</span>
         </button>
