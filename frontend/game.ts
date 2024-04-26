@@ -117,8 +117,11 @@ const YahtzeeMachine = createMachine(
       getFinalScore: ({ context, }) => {
         const { upperSection, lowerSection } = context;
         const score = calculateCurrentScore(upperSection, lowerSection)
-        localStorage.setItem("highScore", `${score}`)
-        alert(score)
+        const prevScore = localStorage.getItem("highScore")
+        if (prevScore && Number(prevScore) < score) {
+          localStorage.setItem("highScore", `${score}`)
+          alert(`New High Score: ${score}`)
+        }
       },
     },
     guards: {
