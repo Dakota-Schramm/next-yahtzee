@@ -80,13 +80,19 @@ interface IScoreboard {
   handleAddLowerScore: (section: string, score: ILowerSection) => void;
 }
 
-const PlayerScores = () => (
+const PlayerScores = ({
+  upper,
+  lower,
+}: {
+  upper: IUpperSection;
+  lower: ILowerSection;
+}) => (
   <header className='flex flex-col items-center justify-start w-full p-4'>
     <h3 className='text-3xl'>Scoreboard</h3>
     <section className='flex justify-between w-full'>
       <span className='flex flex-col items-center justify-center'>
         <h5>Current Score: </h5>
-        {0}
+        {calculateCurrentScore(upper, lower)}
       </span>
       <span className='flex flex-col items-center justify-center'>
         <h5>Top Score: </h5>
@@ -119,7 +125,7 @@ const Scoreboard = ({
 
   return (
     <section className='flex flex-col items-start justify-between w-full h-full bg-[#e1e1e1] rounded-lg border border-solid border-black'>
-      <PlayerScores />
+      <PlayerScores {...{ upper, lower }} />
 
       <div className='flex flex-col items-center justify-between h-full'>
         {/* Upper  */}
@@ -251,6 +257,25 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
       return calculatedScore;
     }
   }
+}
+
+function calculateCurrentScore(upperSection, lowerSection) {
+  let score = 0;
+  for (let key in upperSection) {
+    if (!upperSection[key]) continue 
+    score += upperSection[key]
+  }
+
+  if (63 <= score) {
+    score += 35
+  }
+
+  for (let key in lowerSection) {
+    if (!lowerSection[key]) continue 
+    score += lowerSection[key]
+  }
+
+  return score
 }
 
 export { calculateScore };

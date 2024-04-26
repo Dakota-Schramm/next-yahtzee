@@ -30,8 +30,8 @@ export const upperSectionDict: IUpperSection = Object.assign(
 );
 
 export const lowerSectionScores: Score ={
-  "3 of a kind": "Three dice have the same face",
-  "4 of a kind": "Four dice have the same face",
+  "3 of a kind": "Sum of all dice rolled",
+  "4 of a kind": "Sum of all dice rolled",
   "Full House": "Three of a kind and two of a kind in one hand",
   "Small Straight": "Four sequential dice - Ex. [1, 2, 3, 4]",
   "Large Straight": "Five sequential dice - Ex. [1, 2, 3, 4, 5]",
