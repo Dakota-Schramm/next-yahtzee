@@ -1,3 +1,10 @@
+import { FaPlay } from "react-icons/fa";
+import { GiRollingDiceCup } from "react-icons/gi";
+import { VscDebugRestart } from "react-icons/vsc";
+import { MdReplay } from "react-icons/md";
+
+
+
 interface IFooterSection {
   currentState: string;
   currentRoll: number;
@@ -32,7 +39,7 @@ const FooterButtons = ({
           className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'
           onClick={handleStart}
         >
-          Start
+          <FaPlay /><span className="ml-4">Start</span>
         </button>
       </>
     )
@@ -43,13 +50,13 @@ const FooterButtons = ({
           className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'
           onClick={handleReroll}
         >
-          Reroll
+          <GiRollingDiceCup /><span className="ml-4">Reroll</span>
         </button>
         <button 
           className='flex items-center justify-center p-4 mx-4 text-white bg-red-700 border rounded-md h-11'
           onClick={handleRestart}
         >
-          Restart
+          <VscDebugRestart /><span className="ml-4">Restart</span>
         </button>
       </div>
     )
@@ -66,7 +73,7 @@ const FooterButtons = ({
           className='flex items-center justify-center p-4 mx-4 border border-gray-700 border-solid rounded-md h-11'
           onClick={handlePlayAgain}
         >
-          Play Again 
+          <MdReplay /><span className="ml-4">Play Again</span>
         </button>
       </>
     )
