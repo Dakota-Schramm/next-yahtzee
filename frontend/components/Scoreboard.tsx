@@ -14,24 +14,32 @@ import Tooltip from './Tooltip';
 import { lowerSectionScores, upperSectionScores } from '~/constants';
 
 interface IScoreBox {
+  canSelect: boolean;
   title: string | number;
   value: number | undefined;
   potentialScore: number;
   onClick: () => void;
 }
 
-const ScoreValue = ({ isHovered, value, potentialScore }) => {
-  let toDisplay = "-";
-  if (value || value === 0) {
-    toDisplay = value
-  } else if (isHovered){
-    toDisplay = potentialScore
-  } 
+const ScoreValue = ({ canSelect, isHovered, value, potentialScore }: {
+  canSelect: boolean;
+  isHovered: boolean;
+  value: number | undefined;
+  potentialScore: number;
+}) => {
+  let toDisplay: string | number = "-";
+  if (canSelect) {
+    if (value || value === 0) {
+      toDisplay = value
+    } else if (isHovered){
+      toDisplay = potentialScore
+    } 
+  }
 
   return <span>{toDisplay}</span>
 }
 
-const ScoreBox = ({ title, value, potentialScore, onClick }: IScoreBox) => {
+const ScoreBox = ({ canSelect, title, value, potentialScore, onClick }: IScoreBox) => {
   const [isHovered, setIsHovered] = useState(false)
 
   const tooltipText = Object.keys(upperSectionScores).includes(title)
@@ -51,7 +59,7 @@ const ScoreBox = ({ title, value, potentialScore, onClick }: IScoreBox) => {
           <Tooltip {...{tooltipText}} />
         </div>
       </header>
-      <ScoreValue {...{ isHovered, potentialScore, value }}/>
+      <ScoreValue {...{ canSelect, isHovered, potentialScore, value }}/>
     </button>
   );
 }
@@ -69,6 +77,7 @@ const ScoreBoardSection = ({ children, title }: IScoreboardSection) => (
 );
 
 interface IScoreboard {
+  canSelect: boolean;
   currentDice: ICurrentDie[];
   // gameTurn: number;
   // addScore: (type: string, column: number | string, value: number) => void;
@@ -114,6 +123,7 @@ const PlayerScores = ({
 // ? Might not need to change current behavior since state machine wont allow that transition in welcome??
 const Scoreboard = ({
   currentDice,
+  canSelect,
   upper,
   handleAddUpperScore,
   lower,
@@ -141,11 +151,11 @@ const Scoreboard = ({
             {Object.entries(upper).map(([key, value]) => (
               <ScoreBox
                 title={key}
-                value={value}
                 potentialScore={upperScores[key]}
                 onClick={() => {
                   handleAddUpperScore(key, upperScores[key]);
                 }}
+                { ...{ canSelect, value }}
               />
             ))}
           </section>
@@ -156,11 +166,11 @@ const Scoreboard = ({
             {Object.entries(lower).map(([key, value]) => (
               <ScoreBox
                 title={key}
-                value={value}
                 potentialScore={lowerScores[key]}
                 onClick={() => {
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
+                { ...{ canSelect, value }}
               />
             ))}
           </section>

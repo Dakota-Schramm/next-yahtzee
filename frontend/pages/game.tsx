@@ -115,6 +115,7 @@ const Game: NextPage = () => {
         </footer>
       </section>
       <Scoreboard
+        canSelect={stateMachine.value !== "welcome"}
         {...{
           currentDice,
           upper,
