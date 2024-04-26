@@ -88,8 +88,8 @@ const Game: NextPage = () => {
 
   return (
     // Have main screen that lets you navigate to scores, exit and play
-    <section className='flex w-screen h-screen'>
-      <section className='flex flex-col items-center justify-between w-full h-full bg-[#d01014]'>
+    <section className='flex w-screen h-screen bg-[#d01014]'>
+      <section className='flex flex-col items-center justify-between w-full h-full '>
         <header className='p-8'>
           <Title />
         </header>
@@ -100,12 +100,12 @@ const Game: NextPage = () => {
           />
         )}
         <footer className='flex flex-col items-center justify-center p-8'>
-          {0 < currentRoll && 
+          {0 < currentRoll && (
             <div className='flex space-x-4'>
               <div>Turn: {calculateTurn(stateMachine.context)}</div>
               <div>Roll: {currentRoll}</div>
             </div>
-          }
+          )}
           <FooterButtons
             currentState={stateMachine.value}
             currentRoll={currentRoll}
@@ -114,7 +114,7 @@ const Game: NextPage = () => {
         </footer>
       </section>
       <Scoreboard
-        canSelect={stateMachine.value !== "welcome"}
+        canSelect={stateMachine.value !== 'welcome'}
         {...{
           currentDice,
           upper,
