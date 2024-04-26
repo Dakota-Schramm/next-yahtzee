@@ -111,6 +111,7 @@ const YahtzeeMachine = createMachine(
       gameOverUI: assign(({ context }) => {
         return ({
           ...context,
+          currentRoll: 0,
           footerButtonId: 3
         })
       }),
