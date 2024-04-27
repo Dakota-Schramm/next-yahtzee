@@ -72,7 +72,7 @@ const ScoreBox = ({ canSelect, title, value, potentialScore, ...props }: IScoreB
       {...props}
     >
       <header className='relative flex justify-between w-full'>
-        <h5 className='w-full text-3xl text-center text-black'>{title}</h5>
+        <h5 className='w-full text-3xl text-center text-black font-jersey10'>{title}</h5>
         <div className='absolute top-0 right-0 flex justify-end w-full'>
           <Tooltip {...{tooltipText}} />
         </div>

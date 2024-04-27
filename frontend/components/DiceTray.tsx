@@ -62,7 +62,7 @@ const Die = (
 }
 
 const DiceTray = ({ currentDice, toggleDiceReroll, canReroll }: IDiceTray) => (
-  <section className='flex relative'>
+  <section className='flex relative font-workSans'>
     <div className='flex justify-center items-center absolute left-[-70px] top-4 bg-white rounded-lg p-1 text-red-500'>
       <CgGlassAlt />
       <span className='uppercase font-bold'>Cup</span>
