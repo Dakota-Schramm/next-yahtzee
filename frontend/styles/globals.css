@@ -14,3 +14,28 @@
 .font-revueStd {
   font-family: "RevueStd", sans-serif;
 }
+
+@font-face {
+  font-family: "Jersey10";
+  src: url('../public/fonts/Jersey10.ttf') format('truetype');
+}
+
+.font-jersey10 {
+  font-family: "Jersey10", sans-serif;
+}
+
+@font-face {
+  font-family: "WorkSans";
+  src: url('../public/fonts/WorkSans.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "WorkSans";
+  src: url('../public/fonts/WorkSans-Italic.ttf') format('truetype');
+  font-style: italic;
+}
+
+.font-workSans {
+  font-family: "WorkSans", sans-serif;
+}
