@@ -36,7 +36,7 @@ const Die = (
   return (
     <button
       className={
-        'w-16 h-16 lg:w-24 lg:h-24 cursor-pointer relative drop-shadow-lg ' +
+        'w-16 h-16 lg:w-24 lg:h-24 cursor-pointer relative shadow-lg ' +
         `${shouldReroll ? '-top-12 ' : 'top-12 '} ` +
         `${
           isDisabled
