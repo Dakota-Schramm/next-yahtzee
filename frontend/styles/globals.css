@@ -39,3 +39,14 @@
 .font-workSans {
   font-family: "WorkSans", sans-serif;
 }
+
+@font-face {
+  font-family: "NewFrench";
+  src: url('../public/fonts/NewFrench.otf') format('opentype');
+  font-style: normal;
+}
+
+.font-newFrench {
+  font-family: "NewFrench", sans-serif;
+}
+
