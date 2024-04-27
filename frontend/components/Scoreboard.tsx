@@ -41,7 +41,7 @@ const ScoreValue = ({ title, canSelect, isHovered, value, potentialScore }: {
     }
 
     return (
-      <span className='flex min-h-4 font-newFrench text-xl'>{checkmarks}</span>
+      <span className='flex min-h-4 font-newFrench text-xl text-red-500'>{checkmarks}</span>
     );
   } else {
     let toDisplay: string | number = "-";
