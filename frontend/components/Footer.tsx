@@ -39,7 +39,7 @@ const FooterButtons = ({
     case "welcome": return (
       <>
         <button 
-          className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'
+          className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11 font-jersey10'
           onClick={()=> {
             var snd = new Audio("sounds/start.wav"); // buffers automatically when created
             if (enabled) snd.play();
@@ -53,26 +53,28 @@ const FooterButtons = ({
     )
     // Turn 1 & 2
     case "playing.deciding": return (
-      <div className="flex flex-row">
-        <button 
+      <div className='flex flex-row font-jersey10'>
+        <button
           className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'
           onClick={() => {
-            var snd = new Audio("sounds/roll.wav"); // buffers automatically when created
+            var snd = new Audio('sounds/roll.wav'); // buffers automatically when created
             if (enabled) snd.play();
 
-            handleReroll()
+            handleReroll();
           }}
         >
-          <GiRollingDiceCup /><span className="ml-4">Reroll</span>
+          <GiRollingDiceCup />
+          <span className='ml-4'>Reroll</span>
         </button>
-        <button 
+        <button
           className='flex items-center justify-center p-4 mx-4 text-white bg-red-700 border rounded-md h-11'
           onClick={handleRestart}
         >
-          <VscDebugRestart /><span className="ml-4">Restart</span>
+          <VscDebugRestart />
+          <span className='ml-4'>Restart</span>
         </button>
       </div>
-    )
+    );
     // Turn 3
     case "FORCE SCORE": return (
       <>
@@ -82,14 +84,15 @@ const FooterButtons = ({
     // Scorecard is full
     case "playing.gameover": return (
       <>
-        <button 
-          className='flex items-center justify-center p-4 mx-4 border border-gray-700 border-solid rounded-md h-11'
+        <button
+          className='flex items-center justify-center p-4 mx-4 border border-gray-700 border-solid rounded-md h-11 font-jersey10'
           onClick={handlePlayAgain}
         >
-          <MdReplay /><span className="ml-4">Play Again</span>
+          <MdReplay />
+          <span className='ml-4'>Play Again</span>
         </button>
       </>
-    )
+    );
     default: throw Error(`Footer button Id invalid ${JSON.stringify(currentState)}`) 
   }
 }
