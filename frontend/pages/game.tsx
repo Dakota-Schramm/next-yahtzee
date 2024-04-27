@@ -88,6 +88,12 @@ const Game: NextPage = () => {
       <section className='flex w-screen h-screen bg-[#d01014] text-white'>
         <section className='flex flex-col items-center justify-between w-full h-full '>
           <GameHeader />
+          {0 < currentRoll && (
+            <div className='flex space-x-4 font-revueStd'>
+              <div>Turn: {calculateTurn(stateMachine.context)}</div>
+              <div>Roll: {currentRoll}</div>
+            </div>
+          )}
           {currentRoll !== 0 && (
             <DiceTray
               toggleDiceReroll={handleToggle}
@@ -95,12 +101,6 @@ const Game: NextPage = () => {
             />
           )}
           <footer className='flex flex-col items-center justify-center p-8'>
-            {0 < currentRoll && (
-              <div className='flex space-x-4'>
-                <div>Turn: {calculateTurn(stateMachine.context)}</div>
-                <div>Roll: {currentRoll}</div>
-              </div>
-            )}
             <FooterButtons
               currentState={stateMachine.value}
               currentRoll={currentRoll}
@@ -127,18 +127,20 @@ function GameHeader() {
   const { enabled, setEnabled } = useContext(SoundContext);
 
   return (
-    <header className='p-8 relative w-full flex justify-center items-center'>
-      <Title />
-      <button
-        className='absolute right-8 top-8 rounded-full p-1 bg-white text-red-500'
-        onClick={() => setEnabled(prev => !prev)}
-      >
-        {enabled
-          ? <PiSpeakerSimpleNoneFill />
-          : <PiSpeakerSimpleXFill />
-        }
-      </button>
-    </header>
+    <>
+      <header className='p-8 relative w-full flex justify-center items-center'>
+        <Title />
+        <button
+          className='absolute right-8 top-8 rounded-full p-1 bg-white text-red-500'
+          onClick={() => setEnabled(prev => !prev)}
+        >
+          {enabled
+            ? <PiSpeakerSimpleNoneFill />
+            : <PiSpeakerSimpleXFill />
+          }
+        </button>
+      </header>
+    </>
   )
 }
 
