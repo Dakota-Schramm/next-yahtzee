@@ -7,14 +7,14 @@ import {
   useContext,
 } from 'react';
 
-import { GiCheckMark } from "react-icons/gi";
+import { GiCheckMark } from 'react-icons/gi';
 
-import { ILowerSection, IUpperSection } from '~/pages/game';
+import { ILowerSection, IUpperSection } from '~/src/pages/game';
 import { initialScore } from '~/hooks/useGameMeta';
 import { ICurrentDie } from './DiceTray';
 import Tooltip from './Tooltip';
-import { lowerSectionScores, upperSectionScores } from '~/constants';
-import { SoundContext } from '~/contexts/sound';
+import { lowerSectionScores, upperSectionScores } from '~/src/constants';
+import { SoundContext } from '~/src/contexts/sound';
 
 interface IScoreBox {
   canSelect: boolean;
@@ -25,62 +25,78 @@ interface IScoreBox {
   disabled: boolean;
 }
 
-const ScoreValue = ({ title, canSelect, isHovered, value, potentialScore }: {
+const ScoreValue = ({
+  title,
+  canSelect,
+  isHovered,
+  value,
+  potentialScore,
+}: {
   canSelect: boolean;
   isHovered: boolean;
   title: string | number;
   value: number | undefined;
   potentialScore: number;
 }) => {
-  if (title === "Yahtzee! Bonuses") {
-    const numOfBonuses = value / 100 
+  if (title === 'Yahtzee! Bonuses') {
+    const numOfBonuses = value / 100;
 
-    const checkmarks = []
-    for (let i=0; i<numOfBonuses; i++) {
-      checkmarks.push(<GiCheckMark />)
+    const checkmarks = [];
+    for (let i = 0; i < numOfBonuses; i++) {
+      checkmarks.push(<GiCheckMark />);
     }
 
     return (
-      <span className='flex min-h-4 font-newFrench text-xl text-red-500'>{checkmarks}</span>
+      <span className='flex min-h-4 font-newFrench text-xl text-red-500'>
+        {checkmarks}
+      </span>
     );
   } else {
-    let toDisplay: string | number = "-";
+    let toDisplay: string | number = '-';
     if (canSelect) {
       if (value || value === 0) {
-        toDisplay = value
-      } else if (isHovered){
-        toDisplay = potentialScore
-      } 
+        toDisplay = value;
+      } else if (isHovered) {
+        toDisplay = potentialScore;
+      }
     }
 
     return <span className='font-newFrench text-xl'>{toDisplay}</span>;
   }
-}
+};
 
-const ScoreBox = ({ canSelect, title, value, potentialScore, ...props }: IScoreBox) => {
-  const [isHovered, setIsHovered] = useState(false)
+const ScoreBox = ({
+  canSelect,
+  title,
+  value,
+  potentialScore,
+  ...props
+}: IScoreBox) => {
+  const [isHovered, setIsHovered] = useState(false);
 
   const tooltipText = Object.keys(upperSectionScores).includes(title)
     ? upperSectionScores[title]
-    : lowerSectionScores[title]
+    : lowerSectionScores[title];
 
   return (
-    <button 
+    <button
       className='flex flex-col items-center justify-center p-2 bg-gray-100 border border-black border-solid min-w-36 rounded-lg '
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       {...props}
     >
       <header className='relative flex justify-between w-full'>
-        <h5 className='w-full text-3xl text-center text-black font-jersey10'>{title}</h5>
+        <h5 className='w-full text-3xl text-center text-black font-jersey10'>
+          {title}
+        </h5>
         <div className='absolute top-0 right-0 flex justify-end w-full'>
-          <Tooltip {...{tooltipText}} />
+          <Tooltip {...{ tooltipText }} />
         </div>
       </header>
-      <ScoreValue {...{ title, canSelect, isHovered, potentialScore, value }}/>
+      <ScoreValue {...{ title, canSelect, isHovered, potentialScore, value }} />
     </button>
   );
-}
+};
 
 interface IScoreboardSection {
   title: string;
@@ -117,9 +133,9 @@ const PlayerScores = ({
   // Add to dep array for effect
 
   useEffect(() => {
-    const score = localStorage.getItem("highScore");
-    if (!score) return
-    setHighScore(Number(score))
+    const score = localStorage.getItem('highScore');
+    if (!score) return;
+    setHighScore(Number(score));
   }, []);
 
   return (
@@ -137,7 +153,7 @@ const PlayerScores = ({
       </section>
     </header>
   );
-}
+};
 
 // TODO: Don't allow scoring if currentRoll isn't valid (in welcome state)
 // ? Might not need to change current behavior since state machine wont allow that transition in welcome??
@@ -150,16 +166,16 @@ const Scoreboard = ({
   handleAddLowerScore,
 }: IScoreboard) => {
   const { enabled, setEnabled } = useContext(SoundContext);
-  var snd = new Audio("sounds/select_score.wav"); // buffers automatically when created
+  var snd = new Audio('sounds/select_score.wav'); // buffers automatically when created
 
   let upperScores = structuredClone(upper);
   for (let key in upperScores) {
-    upperScores[key] = getScoreForUpperSection(currentDice, Number(key))
+    upperScores[key] = getScoreForUpperSection(currentDice, Number(key));
   }
 
   let lowerScores = structuredClone(lower);
   for (let key in lowerScores) {
-    lowerScores[key] = getScoreForLowerSection(currentDice, key)
+    lowerScores[key] = getScoreForLowerSection(currentDice, key);
   }
 
   return (
@@ -190,7 +206,7 @@ const Scoreboard = ({
       </div>
     </section>
   );
-}
+};
 
 function LowerScoreBoard({
   lower,
@@ -199,26 +215,26 @@ function LowerScoreBoard({
   canSelect,
 }) {
   const { enabled, setEnabled } = useContext(SoundContext);
-  var snd = new Audio("sounds/select_score.wav"); // buffers automatically when created
-  var yahtzeeSnd = new Audio("sounds/yahtzee.wav"); // buffers automatically when created
+  var snd = new Audio('sounds/select_score.wav'); // buffers automatically when created
+  var yahtzeeSnd = new Audio('sounds/yahtzee.wav'); // buffers automatically when created
 
-  const yahtzeeScore = lower["Yahtzee!"]
-  const yahtzeeBonusScore = lower["Yahtzee! Bonuses"]
+  const yahtzeeScore = lower['Yahtzee!'];
+  const yahtzeeBonusScore = lower['Yahtzee! Bonuses'];
   const isBonusSelectable = yahtzeeScore === 50 && yahtzeeBonusScore < 300;
 
   const scoreBoxProps = (key, value) => {
-    return ({
+    return {
       title: key,
       value: value,
-      potentialScore: lowerScores[key]
-    })
-  }
+      potentialScore: lowerScores[key],
+    };
+  };
 
   return (
     <ScoreBoardSection title='Lower Section'>
       <section className='grid grid-cols-4 grid-rows-2 gap-x-8 gap-y-8'>
         {Object.entries(lower).map(([key, value]) => {
-          if (key === "Yahtzee! Bonuses") {
+          if (key === 'Yahtzee! Bonuses') {
             return (
               <ScoreBox
                 canSelect={isBonusSelectable}
@@ -227,10 +243,10 @@ function LowerScoreBoard({
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
                 disabled={value !== undefined && 0 <= value}
-                { ...scoreBoxProps(key, value) }
+                {...scoreBoxProps(key, value)}
               />
-            )
-          } else if (key === "Yahtzee!") {
+            );
+          } else if (key === 'Yahtzee!') {
             return (
               <ScoreBox
                 onClick={() => {
@@ -238,10 +254,10 @@ function LowerScoreBoard({
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
                 disabled={value !== undefined && 0 <= value}
-                { ...scoreBoxProps(key, value) }
+                {...scoreBoxProps(key, value)}
                 {...{ canSelect }}
               />
-            )
+            );
           } else {
             return (
               <ScoreBox
@@ -250,15 +266,15 @@ function LowerScoreBoard({
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
                 disabled={value !== undefined && 0 <= value}
-                { ...scoreBoxProps(key, value) }
+                {...scoreBoxProps(key, value)}
                 {...{ canSelect }}
               />
-            )
+            );
           }
         })}
       </section>
     </ScoreBoardSection>
-  )
+  );
 }
 
 ///
@@ -369,20 +385,20 @@ function getScoreForLowerSection(currentDice: ICurrentDie[], type: string) {
 export function calculateCurrentScore(upperSection, lowerSection) {
   let score = 0;
   for (let key in upperSection) {
-    if (!upperSection[key]) continue 
-    score += upperSection[key]
+    if (!upperSection[key]) continue;
+    score += upperSection[key];
   }
 
   if (63 <= score) {
-    score += 35
+    score += 35;
   }
 
   for (let key in lowerSection) {
-    if (!lowerSection[key]) continue 
-    score += lowerSection[key]
+    if (!lowerSection[key]) continue;
+    score += lowerSection[key];
   }
 
-  return score
+  return score;
 }
 
 export { calculateScore };

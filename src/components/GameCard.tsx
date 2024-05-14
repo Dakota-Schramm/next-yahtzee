@@ -1,43 +1,40 @@
 import React, { useContext } from 'react';
 
-import { PiSpeakerSimpleNoneFill } from "react-icons/pi";
-import { PiSpeakerSimpleXFill } from "react-icons/pi";
+import { PiSpeakerSimpleNoneFill } from 'react-icons/pi';
+import { PiSpeakerSimpleXFill } from 'react-icons/pi';
 
-import DiceTray, { ICurrentDie } from '../components/DiceTray';
-import FooterButtons from '../components/Footer';
-import Title from '~/components/Title';
-import { SoundContext } from '~/contexts/sound';
+import DiceTray, { ICurrentDie } from './DiceTray';
+import FooterButtons from './Footer';
+import Title from '~/src/components/Title';
+import { SoundContext } from '~/src/contexts/sound';
 
 const GameCard = ({ stateMachine, send }) => {
-  const {
-    currentRoll,
-    currentDice,
-  } = stateMachine.context;
+  const { currentRoll, currentDice } = stateMachine.context;
 
   function handleStart() {
-    send({ type: "START" })
-    send({ type: "ROLL" })
-    send({ type: "ROLLED" })
+    send({ type: 'START' });
+    send({ type: 'ROLL' });
+    send({ type: 'ROLLED' });
   }
   function handleReroll() {
-    send({ type: "ROLL" })
-    send({ type: "ROLLED" })
+    send({ type: 'ROLL' });
+    send({ type: 'ROLLED' });
   }
 
   function handleToggle(diceToToggle: number) {
-    send({ type: "MOVE_DIE", dieToMove: diceToToggle })
+    send({ type: 'MOVE_DIE', dieToMove: diceToToggle });
   }
 
-  function handleRestart() { 
-    send({ type: "STARTOVER" })
-    send({ type: "ROLL" })
-    send({ type: "ROLLED" })
+  function handleRestart() {
+    send({ type: 'STARTOVER' });
+    send({ type: 'ROLL' });
+    send({ type: 'ROLLED' });
   }
 
   function handlePlayAgain() {
-    send({ type: "STARTOVER" })
-    send({ type: "ROLL" })
-    send({ type: "ROLLED" })
+    send({ type: 'STARTOVER' });
+    send({ type: 'ROLL' });
+    send({ type: 'ROLLED' });
   }
 
   const footerHandlers = {
@@ -45,7 +42,7 @@ const GameCard = ({ stateMachine, send }) => {
     handleReroll,
     handleRestart,
     handlePlayAgain,
-  }
+  };
 
   const canReroll = currentRoll !== 3;
 
@@ -72,8 +69,8 @@ const GameCard = ({ stateMachine, send }) => {
         />
       </footer>
     </section>
-  )
-}
+  );
+};
 
 function GameHeader() {
   const { enabled, setEnabled } = useContext(SoundContext);
@@ -84,24 +81,25 @@ function GameHeader() {
         <Title />
         <button
           className='absolute right-8 top-8 rounded-full p-1 bg-white text-red-500'
-          onClick={() => setEnabled(prev => !prev)}
+          onClick={() => setEnabled((prev) => !prev)}
         >
-          {enabled
-            ? <PiSpeakerSimpleNoneFill />
-            : <PiSpeakerSimpleXFill />
-          }
+          {enabled ? <PiSpeakerSimpleNoneFill /> : <PiSpeakerSimpleXFill />}
         </button>
       </header>
     </>
-  )
+  );
 }
 
 function calculateTurn(context) {
   const { upperSection, lowerSection } = context;
-  const upperFilled = Object.values(upperSection).filter(val => val !== undefined).length;
-  const lowerFilled = Object.values(lowerSection).filter(val => val !== undefined).length;
+  const upperFilled = Object.values(upperSection).filter(
+    (val) => val !== undefined
+  ).length;
+  const lowerFilled = Object.values(lowerSection).filter(
+    (val) => val !== undefined
+  ).length;
 
-  return upperFilled + lowerFilled + 1
+  return upperFilled + lowerFilled + 1;
 }
 
-export default GameCard
+export default GameCard;

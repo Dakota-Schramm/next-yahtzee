@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import type { NextPage } from 'next'
-import React, { useContext, useEffect, } from 'react';
+import type { NextPage } from 'next';
+import React, { useContext, useEffect } from 'react';
 
 import { upperSectionScores, lowerSectionScores } from '../constants';
 
 import Scoreboard from '../components/Scoreboard';
 
 import { useMachine } from '@xstate/react';
-import YahtzeeMachine, { scoreCardFilled } from '~/game';
-import { SoundProvider } from '~/contexts/sound';
-import GameCard from '~/components/GameCard';
+import YahtzeeMachine, { scoreCardFilled } from '~/src/game';
+import { SoundProvider } from '~/src/contexts/sound';
+import GameCard from '~/src/components/GameCard';
 
 const Game: NextPage = () => {
   const [stateMachine, send] = useMachine(YahtzeeMachine);
@@ -22,22 +22,22 @@ const Game: NextPage = () => {
   } = stateMachine.context;
 
   function handleAddUpperScore(type: number, value: number) {
-    send({ type: "SCORE_TURN", column: type, value })
-    const isFinalMove = scoreCardFilled(stateMachine.context)
+    send({ type: 'SCORE_TURN', column: type, value });
+    const isFinalMove = scoreCardFilled(stateMachine.context);
     if (!isFinalMove) {
-      send({ type: "NEXT_TURN" })
-      send({ type: "ROLL" })
-      send({ type: "ROLLED" })
+      send({ type: 'NEXT_TURN' });
+      send({ type: 'ROLL' });
+      send({ type: 'ROLLED' });
     }
   }
 
   function handleAddLowerScore(type: string, value: number) {
-    send({ type: "SCORE_TURN", column: type, value })
-    const isFinalMove = scoreCardFilled(stateMachine.context)
+    send({ type: 'SCORE_TURN', column: type, value });
+    const isFinalMove = scoreCardFilled(stateMachine.context);
     if (!isFinalMove) {
-      send({ type: "NEXT_TURN" })
-      send({ type: "ROLL" })
-      send({ type: "ROLLED" })
+      send({ type: 'NEXT_TURN' });
+      send({ type: 'ROLL' });
+      send({ type: 'ROLLED' });
     }
   }
 
@@ -57,8 +57,8 @@ const Game: NextPage = () => {
           }}
         />
       </section>
-    </SoundProvider> 
+    </SoundProvider>
   );
-}
+};
 
-export default Game 
+export default Game;

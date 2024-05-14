@@ -1,7 +1,7 @@
 import { createMachine, assign } from 'xstate';
 import { lowerSectionDict, numOfDice, upperSectionDict, upperSectionScores, lowerSectionScores } from './constants';
 
-import { type ICurrentDie } from "~/components/DiceTray";
+import { type ICurrentDie } from "~/src/components/DiceTray";
 import { calculateCurrentScore } from './components/Scoreboard';
 
 /*

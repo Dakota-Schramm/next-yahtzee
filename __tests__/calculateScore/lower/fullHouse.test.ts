@@ -1,6 +1,6 @@
 import {describe, expect, test} from '@jest/globals';
 
-import { calculateScore } from '~/components/Scoreboard'
+import { calculateScore } from '~/src/components/Scoreboard'
 import { allOnes } from '../constants'
 
 test('[1, 1, 2, 2, 2] returns 25 for Full House', () => {

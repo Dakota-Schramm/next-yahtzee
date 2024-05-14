@@ -1,6 +1,6 @@
 import {describe, expect, test} from '@jest/globals';
 
-import { calculateScore } from '~/components/Scoreboard'
+import { calculateScore } from '~/src/components/Scoreboard'
 import { allOnes, noDuplicates } from '../constants'
 
 test('no duplicates returns 30 for Small Straight', () => {
