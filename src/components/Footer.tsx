@@ -2,7 +2,7 @@ import { FaPlay } from 'react-icons/fa';
 import { GiRollingDiceCup } from 'react-icons/gi';
 import { VscDebugRestart } from 'react-icons/vsc';
 import { MdReplay } from 'react-icons/md';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SoundContext } from '~/contexts/sound';
 
 interface IFooterSection {
@@ -24,6 +24,17 @@ const FooterButtons = ({
 }: IFooterSection) => {
   const { enabled } = useContext(SoundContext);
 
+  const [playAudio, setPlayAudio] = useState<{
+    start?: HTMLAudioElement, roll?: HTMLAudioElement
+  }>({ start: undefined, roll: undefined })
+
+  useEffect(() => {
+    setPlayAudio({
+      start: new Audio('sounds/start.wav'),
+      roll: new Audio('sounds/roll.wav')
+    })
+  }, []);
+
   let state =
     typeof currentState === 'string'
       ? currentState
@@ -41,8 +52,7 @@ const FooterButtons = ({
           <button
             className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11 font-jersey10'
             onClick={() => {
-              var snd = new Audio('sounds/start.wav'); // buffers automatically when created
-              if (enabled) snd.play();
+              if (enabled) playAudio["start"]?.play();
 
               handleStart();
             }}
@@ -59,8 +69,7 @@ const FooterButtons = ({
           <button
             className='flex items-center justify-center p-4 mx-4 text-white bg-blue-500 rounded-md h-11'
             onClick={() => {
-              var snd = new Audio('sounds/roll.wav'); // buffers automatically when created
-              if (enabled) snd.play();
+              if (enabled) playAudio["roll"]?.play();
 
               handleReroll();
             }}

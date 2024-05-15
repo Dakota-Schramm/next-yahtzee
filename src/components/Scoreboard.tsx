@@ -166,7 +166,15 @@ const Scoreboard = ({
   handleAddLowerScore,
 }: IScoreboard) => {
   const { enabled, setEnabled } = useContext(SoundContext);
-  var snd = new Audio('sounds/select_score.wav'); // buffers automatically when created
+  const [playAudio, setPlayAudio] = useState<{
+    select_score?: HTMLAudioElement
+  }>({ select_score: undefined, })
+
+  useEffect(() => {
+    setPlayAudio({
+      select_score: new Audio('sounds/select_score.wav'),
+    })
+  }, []);
 
   let upperScores = structuredClone(upper);
   for (let key in upperScores) {
@@ -192,7 +200,7 @@ const Scoreboard = ({
                 potentialScore={upperScores[key]}
                 disabled={value !== undefined && 0 <= value}
                 onClick={() => {
-                  if (enabled) snd.play();
+                  if (enabled) playAudio['select_score']?.play();
                   handleAddUpperScore(key, upperScores[key]);
                 }}
                 {...{ canSelect, value }}
@@ -215,8 +223,17 @@ function LowerScoreBoard({
   canSelect,
 }) {
   const { enabled, setEnabled } = useContext(SoundContext);
-  var snd = new Audio('sounds/select_score.wav'); // buffers automatically when created
-  var yahtzeeSnd = new Audio('sounds/yahtzee.wav'); // buffers automatically when created
+
+  const [playAudio, setPlayAudio] = useState<{
+    yahtzee?: HTMLAudioElement, select_score?: HTMLAudioElement
+  }>({ yahtzee: undefined, select_score: undefined, })
+
+  useEffect(() => {
+    setPlayAudio({
+      yahtzee: new Audio('sounds/yahtzee.wav'),
+      select_score: new Audio('sounds/select_score.wav'),
+    })
+  }, []);
 
   const yahtzeeScore = lower['Yahtzee!'];
   const yahtzeeBonusScore = lower['Yahtzee! Bonuses'];
@@ -239,7 +256,7 @@ function LowerScoreBoard({
               <ScoreBox
                 canSelect={isBonusSelectable}
                 onClick={() => {
-                  if (enabled) yahtzeeSnd.play();
+                  if (enabled) playAudio['yahtzee']?.play();
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
                 disabled={value !== undefined && 0 <= value}
@@ -262,7 +279,7 @@ function LowerScoreBoard({
             return (
               <ScoreBox
                 onClick={() => {
-                  if (enabled) snd.play();
+                  if (enabled) playAudio["select_score"]?.play();
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
                 disabled={value !== undefined && 0 <= value}

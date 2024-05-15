@@ -8,7 +8,9 @@ import FooterButtons from './Footer';
 import Title from '~/components/Title';
 import { SoundContext } from '~/contexts/sound';
 
-const GameCard = ({ stateMachine, send }) => {
+
+
+const GameCard = ({ stateMachine, send }: { stateMachine: any, send: any }) => {
   const { currentRoll, currentDice } = stateMachine.context;
 
   function handleStart() {

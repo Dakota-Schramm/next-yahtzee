@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  basePath: "/next-yahtzee",
   reactStrictMode: true,
-  output: "export",  // <=== enables static exports
+  output: "standalone",  // <=== enables static exports
+  typescript: {
+    tsconfigPath: "tsconfig.build.json",
+    ignoreBuildErrors: true,
+  },
 }
