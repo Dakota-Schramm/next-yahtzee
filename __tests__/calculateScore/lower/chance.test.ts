@@ -1,6 +1,6 @@
 import {describe, expect, test} from '@jest/globals';
 
-import { calculateScore } from '~/src/components/Scoreboard'
+import { calculateScore } from '~/components/Scoreboard'
 import { allOnes, allSixes, noDuplicates } from '../constants'
 
 // Chance

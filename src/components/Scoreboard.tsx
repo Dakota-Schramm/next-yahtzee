@@ -9,12 +9,12 @@ import {
 
 import { GiCheckMark } from 'react-icons/gi';
 
-import { ILowerSection, IUpperSection } from '~/src/pages/game';
+import { ILowerSection, IUpperSection } from '~/pages/game';
 import { initialScore } from '~/hooks/useGameMeta';
 import { ICurrentDie } from './DiceTray';
 import Tooltip from './Tooltip';
-import { lowerSectionScores, upperSectionScores } from '~/src/constants';
-import { SoundContext } from '~/src/contexts/sound';
+import { lowerSectionScores, upperSectionScores } from '~/constants';
+import { SoundContext } from '~/contexts/sound';
 
 interface IScoreBox {
   canSelect: boolean;

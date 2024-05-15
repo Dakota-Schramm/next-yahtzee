@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 // import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom';
-import Scoreboard from '~/src/components/Scoreboard';
+import Scoreboard from '~/components/Scoreboard';
 
 const allOnes = [1, 1, 1, 1, 1];
 

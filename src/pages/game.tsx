@@ -8,9 +8,9 @@ import { upperSectionScores, lowerSectionScores } from '../constants';
 import Scoreboard from '../components/Scoreboard';
 
 import { useMachine } from '@xstate/react';
-import YahtzeeMachine, { scoreCardFilled } from '~/src/game';
-import { SoundProvider } from '~/src/contexts/sound';
-import GameCard from '~/src/components/GameCard';
+import YahtzeeMachine, { scoreCardFilled } from '~/game';
+import { SoundProvider } from '~/contexts/sound';
+import GameCard from '~/components/GameCard';
 
 const Game: NextPage = () => {
   const [stateMachine, send] = useMachine(YahtzeeMachine);

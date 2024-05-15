@@ -5,8 +5,8 @@ import { PiSpeakerSimpleXFill } from 'react-icons/pi';
 
 import DiceTray, { ICurrentDie } from './DiceTray';
 import FooterButtons from './Footer';
-import Title from '~/src/components/Title';
-import { SoundContext } from '~/src/contexts/sound';
+import Title from '~/components/Title';
+import { SoundContext } from '~/contexts/sound';
 
 const GameCard = ({ stateMachine, send }) => {
   const { currentRoll, currentDice } = stateMachine.context;

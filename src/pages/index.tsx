@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { GiRollingDiceCup } from 'react-icons/gi';
 
-import Title from '~/src/components/Title';
+import Title from '~/components/Title';
 
 const Home: NextPage = () => {
   return (

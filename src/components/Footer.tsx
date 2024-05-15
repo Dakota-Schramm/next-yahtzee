@@ -3,7 +3,7 @@ import { GiRollingDiceCup } from 'react-icons/gi';
 import { VscDebugRestart } from 'react-icons/vsc';
 import { MdReplay } from 'react-icons/md';
 import { useContext } from 'react';
-import { SoundContext } from '~/src/contexts/sound';
+import { SoundContext } from '~/contexts/sound';
 
 interface IFooterSection {
   currentState: string;
