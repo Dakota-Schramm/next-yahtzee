@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: "RevueStd";
-  src: url('../public/fonts/RevueStd.ttf') format('truetype');
+  src: url('../../public/fonts/RevueStd.ttf') format('truetype');
 }
 
 .font-revueStd {
@@ -17,7 +17,7 @@
 
 @font-face {
   font-family: "Jersey10";
-  src: url('../public/fonts/Jersey10.ttf') format('truetype');
+  src: url('../../public/fonts/Jersey10.ttf') format('truetype');
 }
 
 .font-jersey10 {
@@ -26,13 +26,13 @@
 
 @font-face {
   font-family: "WorkSans";
-  src: url('../public/fonts/WorkSans.ttf') format('truetype');
+  src: url('../../public/fonts/WorkSans.ttf') format('truetype');
   font-style: normal;
 }
 
 @font-face {
   font-family: "WorkSans";
-  src: url('../public/fonts/WorkSans-Italic.ttf') format('truetype');
+  src: url('../../public/fonts/WorkSans-Italic.ttf') format('truetype');
   font-style: italic;
 }
 
@@ -42,7 +42,7 @@
 
 @font-face {
   font-family: "NewFrench";
-  src: url('../public/fonts/NewFrench.otf') format('opentype');
+  src: url('../../public/fonts/NewFrench.otf') format('opentype');
   font-style: normal;
 }
 
