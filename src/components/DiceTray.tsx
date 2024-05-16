@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useState, FC } from 'react'
 
 import { CgGlassAlt } from "react-icons/cg";
@@ -47,7 +48,7 @@ const Die = (
       onClick={onClick}
       disabled={isDisabled}
     >
-      <img
+      <Image
         src={`/dice/dice-six-faces-${faceToNumber}.svg`}
         alt='Current dice face'
       />
