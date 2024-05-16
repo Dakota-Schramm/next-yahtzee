@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React, { useState, FC } from 'react'
 
 import { CgGlassAlt } from "react-icons/cg";
@@ -25,13 +24,13 @@ const Die = (
 ) => {
   const shouldReroll = location === "cup";
 
-  const faceToNumber = {
-    1: "one",
-    2: "two",
-    3: "three",
-    4: "four",
-    5: "five",
-    6: "six"
+  const faceToNumberSvgPath = {
+    1: "/dice/dice-six-faces-one.svg",
+    2: "/dice/dice-six-faces-two.svg",
+    3: "/dice/dice-six-faces-three.svg",
+    4: "/dice/dice-six-faces-four.svg",
+    5: "/dice/dice-six-faces-five.svg",
+    6: "/dice/dice-six-faces-six.svg"
   }[face]
 
   return (
@@ -48,8 +47,8 @@ const Die = (
       onClick={onClick}
       disabled={isDisabled}
     >
-      <Image
-        src={`/dice/dice-six-faces-${faceToNumber}.svg`}
+      <img
+        src={faceToNumberSvgPath}
         alt='Current dice face'
       />
       <div
