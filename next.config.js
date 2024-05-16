@@ -6,4 +6,7 @@ module.exports = {
     tsconfigPath: "tsconfig.build.json",
     ignoreBuildErrors: true,
   },
+  images: {
+    dangerouslyAllowSVG: true,
+  }
 }
