@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
-  output: "standalone",  // <=== enables static exports
+  output: "export",
   typescript: {
     tsconfigPath: "tsconfig.build.json",
     ignoreBuildErrors: true,
