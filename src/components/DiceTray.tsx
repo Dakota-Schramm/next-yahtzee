@@ -1,4 +1,5 @@
 import React, { useState, FC } from 'react'
+import Image from 'next/image';
 
 import { CgGlassAlt } from "react-icons/cg";
 import { PiTrayLight } from "react-icons/pi";
@@ -25,12 +26,12 @@ const Die = (
   const shouldReroll = location === "cup";
 
   const faceToNumberSvgPath = {
-    1: "/dice/dice-six-faces-one.svg",
-    2: "/dice/dice-six-faces-two.svg",
-    3: "/dice/dice-six-faces-three.svg",
-    4: "/dice/dice-six-faces-four.svg",
-    5: "/dice/dice-six-faces-five.svg",
-    6: "/dice/dice-six-faces-six.svg"
+    1: "dice/dice-six-faces-one.svg",
+    2: "dice/dice-six-faces-two.svg",
+    3: "dice/dice-six-faces-three.svg",
+    4: "dice/dice-six-faces-four.svg",
+    5: "dice/dice-six-faces-five.svg",
+    6: "dice/dice-six-faces-six.svg"
   }[face]
 
   return (
@@ -49,7 +50,7 @@ const Die = (
     >
       <img
         src={faceToNumberSvgPath}
-        alt='Current dice face'
+        alt={`Current dice face ${face}`}
       />
       <div
         className={
