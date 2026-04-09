@@ -47,7 +47,7 @@ const ScoreValue = ({
     }
 
     return (
-      <span className='flex min-h-4 font-newFrench text-xl text-red-500'>
+      <span className='flex text-xl text-red-500 min-h-4 font-newFrench'>
         {checkmarks}
       </span>
     );
@@ -61,7 +61,7 @@ const ScoreValue = ({
       }
     }
 
-    return <span className='font-newFrench text-xl'>{toDisplay}</span>;
+    return <span className='text-xl font-newFrench'>{toDisplay}</span>;
   }
 };
 
@@ -80,7 +80,7 @@ const ScoreBox = ({
 
   return (
     <button
-      className='flex flex-col items-center justify-center p-2 bg-gray-100 border border-black border-solid min-w-36 rounded-lg '
+      className='flex flex-col items-center justify-center p-2 bg-gray-100 border border-black border-solid rounded-lg min-w-36 '
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       {...props}
@@ -167,13 +167,13 @@ const Scoreboard = ({
 }: IScoreboard) => {
   const { enabled, setEnabled } = useContext(SoundContext);
   const [playAudio, setPlayAudio] = useState<{
-    select_score?: HTMLAudioElement
-  }>({ select_score: undefined, })
+    select_score?: HTMLAudioElement;
+  }>({ select_score: undefined });
 
   useEffect(() => {
     setPlayAudio({
       select_score: new Audio('sounds/select_score.wav'),
-    })
+    });
   }, []);
 
   let upperScores = structuredClone(upper);
@@ -225,14 +225,15 @@ function LowerScoreBoard({
   const { enabled, setEnabled } = useContext(SoundContext);
 
   const [playAudio, setPlayAudio] = useState<{
-    yahtzee?: HTMLAudioElement, select_score?: HTMLAudioElement
-  }>({ yahtzee: undefined, select_score: undefined, })
+    yahtzee?: HTMLAudioElement;
+    select_score?: HTMLAudioElement;
+  }>({ yahtzee: undefined, select_score: undefined });
 
   useEffect(() => {
     setPlayAudio({
       yahtzee: new Audio('sounds/yahtzee.wav'),
       select_score: new Audio('sounds/select_score.wav'),
-    })
+    });
   }, []);
 
   const yahtzeeScore = lower['Yahtzee!'];
@@ -259,7 +260,7 @@ function LowerScoreBoard({
                   if (enabled) playAudio['yahtzee']?.play();
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
-                disabled={value !== undefined && 0 <= value}
+                disabled={lower['Yahtzee!'] !== 50 || yahtzeeBonusScore >= 300}
                 {...scoreBoxProps(key, value)}
               />
             );
@@ -279,7 +280,7 @@ function LowerScoreBoard({
             return (
               <ScoreBox
                 onClick={() => {
-                  if (enabled) playAudio["select_score"]?.play();
+                  if (enabled) playAudio['select_score']?.play();
                   handleAddLowerScore(key, lowerScores[key]);
                 }}
                 disabled={value !== undefined && 0 <= value}
