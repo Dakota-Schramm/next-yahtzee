@@ -79,10 +79,10 @@ function GameHeader() {
 
   return (
     <>
-      <header className='p-8 relative w-full flex justify-center items-center'>
+      <header className='relative flex items-center justify-center w-full p-8'>
         <Title />
         <button
-          className='absolute right-8 top-8 rounded-full p-1 bg-white text-red-500'
+          className='absolute p-1 text-red-500 bg-white rounded-full right-8 top-8'
           onClick={() => setEnabled((prev) => !prev)}
         >
           {enabled ? <PiSpeakerSimpleNoneFill /> : <PiSpeakerSimpleXFill />}
@@ -97,9 +97,12 @@ function calculateTurn(context) {
   const upperFilled = Object.values(upperSection).filter(
     (val) => val !== undefined
   ).length;
-  const lowerFilled = Object.values(lowerSection).filter(
-    (val) => val !== undefined
-  ).length;
+  let lowerFilled = Object.entries(lowerSection)
+    .filter(([key]) => key !== 'Yahtzee! Bonuses')
+    .filter(([, val]) => val !== undefined).length;
+  lowerFilled += lowerSection['Yahtzee! Bonuses']
+    ? lowerSection['Yahtzee! Bonuses'] / 100
+    : 0;
 
   return upperFilled + lowerFilled + 1;
 }
