@@ -1,21 +1,18 @@
 'use client';
 
 import type { NextPage } from 'next';
-import React, { useContext, useEffect } from 'react';
-
-import { upperSectionScores, lowerSectionScores } from '../constants';
-
-import Scoreboard from '../components/Scoreboard';
-
+import React from 'react';
 import { useMachine } from '@xstate/react';
-import YahtzeeMachine, { scoreCardFilled } from '~/game';
+
 import { SoundProvider } from '~/contexts/sound';
+import YahtzeeMachine, { scoreCardFilled } from '~/game';
 import GameCard from '~/components/GameCard';
+
+import Scoreboard from '~/components/Scoreboard';
 
 const Game: NextPage = () => {
   const [stateMachine, send] = useMachine(YahtzeeMachine);
   const {
-    currentRoll,
     currentDice,
     upperSection: upper,
     lowerSection: lower,
