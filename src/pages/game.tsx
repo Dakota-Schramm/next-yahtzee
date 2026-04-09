@@ -7,8 +7,12 @@ import { useMachine } from '@xstate/react';
 import { SoundProvider } from '~/contexts/sound';
 import YahtzeeMachine, { scoreCardFilled } from '~/game';
 import GameCard from '~/components/GameCard';
-
 import Scoreboard from '~/components/Scoreboard';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+} from '~/components/ui/drawer';
 
 const Game: NextPage = () => {
   const [stateMachine, send] = useMachine(YahtzeeMachine);
@@ -38,22 +42,31 @@ const Game: NextPage = () => {
     }
   }
 
+  const scoreboardProps = {
+    canSelect: stateMachine.value !== 'welcome',
+    currentDice,
+    upper,
+    handleAddUpperScore,
+    lower,
+    handleAddLowerScore,
+  };
+
   return (
-    // Have main screen that lets you navigate to scores, exit and play
     <SoundProvider>
-      <section className='flex w-screen h-screen bg-[#d01014] text-white'>
-        <GameCard {...{ stateMachine, send }} />
-        <Scoreboard
-          canSelect={stateMachine.value !== 'welcome'}
-          {...{
-            currentDice,
-            upper,
-            handleAddUpperScore,
-            lower,
-            handleAddLowerScore,
-          }}
-        />
-      </section>
+      <Drawer>
+        <section className='flex w-screen h-screen bg-[#d01014] text-white'>
+          <GameCard {...{ stateMachine, send }} />
+          <div className='hidden md:flex w-full h-full'>
+            <Scoreboard {...scoreboardProps} />
+          </div>
+        </section>
+        <DrawerContent className='bg-[#e1e1e1] text-red-700 max-h-[85vh]'>
+          <DrawerTitle className='sr-only'>Scoreboard</DrawerTitle>
+          <div className='overflow-y-auto pb-8'>
+            <Scoreboard {...scoreboardProps} />
+          </div>
+        </DrawerContent>
+      </Drawer>
     </SoundProvider>
   );
 };

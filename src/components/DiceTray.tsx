@@ -38,7 +38,7 @@ const Die = (
     <button
       className={
         'w-16 h-16 lg:w-24 lg:h-24 cursor-pointer relative shadow-lg ' +
-        `${shouldReroll ? '-top-12 ' : 'top-12 '} ` +
+        `${shouldReroll ? '-left-12 top-0 md:left-0 md:-top-12 ' : 'left-12 top-0 md:left-0 md:top-12 '} ` +
         `${
           isDisabled
             ? ''
@@ -64,15 +64,15 @@ const Die = (
 
 const DiceTray = ({ currentDice, toggleDiceReroll, canReroll }: IDiceTray) => (
   <section className='flex relative font-workSans'>
-    <div className='flex justify-center items-center absolute left-[-70px] top-4 bg-white rounded-lg p-1 text-red-500'>
+    <div className='flex justify-center items-center absolute -left-16 top-1/2 -translate-y-1/2 md:left-[-70px] md:top-4 md:translate-y-0 bg-white rounded-lg p-1 text-red-500'>
       <CgGlassAlt />
       <span className='uppercase font-bold'>Cup</span>
     </div>
-    <div className='flex justify-center items-center absolute -left-20 bottom-4 bg-white rounded-lg p-1 text-red-500'>
+    <div className='flex justify-center items-center absolute right-[-64px] bottom-1/2 translate-y-1/2 md:-left-20 md:bottom-4 md:right-auto md:translate-y-0 bg-white rounded-lg p-1 text-red-500'>
       <PiTrayLight />
       <span className='uppercase font-bold'>Tray</span>
     </div>
-    <div className='flex flex-row space-x-4'>
+    <div className='flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4'>
       {currentDice.map((diceObj, diceNum) => (
         <Die
           onClick={() => {
