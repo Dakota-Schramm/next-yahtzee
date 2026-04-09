@@ -4,6 +4,8 @@
 [![Built With](https://img.shields.io/badge/built%20with-Next.js%20%2B%20XState-blue)](https://nextjs.org/)
 [![Tests](https://img.shields.io/badge/tests-15%20passing-success)](.)
 
+![Yahtzee](./yahtzee-five-turns.gif)
+
 A fully playable Yahtzee dice game built with Next.js — managing the entire game loop through XState finite state machines instead of ad-hoc React state.
 
 ## The Problem
