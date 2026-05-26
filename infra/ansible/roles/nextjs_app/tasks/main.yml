@@ -3,6 +3,6 @@
 # tasks file for nextjs_app
 # ? Might need to cd first
 - name: build app
-  shell: npm install 
+  shell: yarn install 
 - name: run app
-  shell: npm start
+  shell: yarn start
