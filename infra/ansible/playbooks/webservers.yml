@@ -1,0 +1,7 @@
+---
+- hosts: all
+  tasks:
+    - name: Print debug message
+      ansible.builtin.debug:
+        msg: "This is a debug message for the webservers playbook."
+    
