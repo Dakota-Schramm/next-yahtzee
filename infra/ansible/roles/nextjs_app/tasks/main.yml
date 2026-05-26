@@ -2,7 +2,10 @@
 ---
 # tasks file for nextjs_app
 # ? Might need to cd first
-- name: build app
+- name: install deps
   shell: yarn install 
+- name: build app
+  shell: yarn build
+# TODO: Change this to use pm2?
 - name: run app
   shell: yarn start
