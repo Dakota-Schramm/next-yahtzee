@@ -1,6 +1,8 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for nextjs_app
-- name: Print debug message
-  ansible.builtin.debug:
-    msg: "This is a debug message for the webservers nextjs_app tasks."
+# ? Might need to cd first
+- name: build app
+  shell: npm install 
+- name: run app
+  shell: npm start
