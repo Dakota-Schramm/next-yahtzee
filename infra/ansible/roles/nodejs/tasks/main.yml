@@ -1,6 +1,7 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for nodejs
-- name: Print debug message
-  ansible.builtin.debug:
-    msg: "This is a debug message for the webservers nodejs tasks."
+- name: "Add nodejs 16.x ppa for apt repo"
+  shell: curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+- name: "install node"
+  shell: apt-get install -y nodejs
