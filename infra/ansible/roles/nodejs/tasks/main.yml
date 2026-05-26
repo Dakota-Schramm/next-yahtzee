@@ -5,3 +5,5 @@
   shell: curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 - name: "install node"
   shell: apt-get install -y nodejs
+- name: "install yarn"
+  shell: npm install -g yarn
