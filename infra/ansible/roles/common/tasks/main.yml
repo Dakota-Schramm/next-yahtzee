@@ -1,3 +1,27 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for common
+- name: Install aptitude
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: true
+- name: Install curl
+  apt:
+    name: curl
+    state: present
+- name: Install wget
+  apt:
+    name: wget
+    state: present
+- name: Install required system packages
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
+    update_cache: true
