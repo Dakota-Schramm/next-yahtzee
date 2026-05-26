@@ -1,8 +1,8 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for nodejs
-- name: "Add nodejs 16.x ppa for apt repo"
-  shell: curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+- name: "Add nodejs 22.x ppa for apt repo"
+  shell: curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
 - name: "install node"
   shell: apt-get install -y nodejs
 - name: "install yarn"
