@@ -20,7 +20,11 @@
   shell: cd /srv/app/ && yarn install 
 - name: build app
   shell: cd /srv/app/ && yarn build
+- name: copy static assets into standalone
+  shell: cp -r /srv/app/.next/static /srv/app/.next/standalone/.next/static
+- name: copy public folder into standalone
+  shell: cp -r /srv/app/public /srv/app/.next/standalone/public
 - name: run app
-  shell: pm2 startOrRestart .next/standalone/server.js --name yahtzee
+  shell: pm2 delete yahtzee 2>/dev/null; pm2 start .next/standalone/server.js --name yahtzee
   args:
     chdir: /srv/app
