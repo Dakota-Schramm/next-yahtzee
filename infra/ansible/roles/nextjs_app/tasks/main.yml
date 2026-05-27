@@ -6,6 +6,6 @@
   shell: yarn install 
 - name: build app
   shell: yarn build
-# TODO: Change this to use pm2?
+# TODO: Change this build to allow serverside logic
 - name: run app
-  shell: yarn start
+  shell: node ./.next/standalone/server.js
