@@ -10,3 +10,6 @@
 - name: "install yarn"
   become: true
   shell: npm install -g yarn
+- name: "install pm2"
+  become: true
+  shell: npm install -g pm2
