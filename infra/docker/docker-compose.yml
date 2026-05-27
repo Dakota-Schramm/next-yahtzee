@@ -1,0 +1,8 @@
+services:
+  ubuntu-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "2222:22"
+    hostname: ubuntu-server
