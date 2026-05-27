@@ -10,7 +10,7 @@
     mode: '0755'
 - name: Sync app source to target
   synchronize:
-    src: "{{ playbook_dir }}/../../../../"   # project root
+    src: "{{ playbook_dir }}/../../../"   # project root
     dest: /srv/app/
     rsync_opts:
       - "--exclude=node_modules"
@@ -22,4 +22,4 @@
   shell: cd /srv/app/ && yarn build
 # TODO: Change this build to allow serverside logic
 - name: run app
-  shell: node ./.next/standalone/server.js
+  shell: cd /srv/app/ && node ./.next/standalone/server.js
