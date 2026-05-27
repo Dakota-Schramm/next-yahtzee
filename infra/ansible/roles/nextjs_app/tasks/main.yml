@@ -1,11 +1,18 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for nextjs_app
-# ? Might need to cd first
+- name: Sync app source to target
+  synchronize:
+    src: "{{ playbook_dir }}/../../../../"   # project root
+    dest: /srv/app/
+    rsync_opts:
+      - "--exclude=node_modules"
+      - "--exclude=.next"
+      - "--exclude=.git"
 - name: install deps
-  shell: yarn install 
+  shell: cd /srv/app/ && yarn install 
 - name: build app
-  shell: yarn build
+  shell: cd /srv/app/ && yarn build
 # TODO: Change this build to allow serverside logic
 - name: run app
   shell: node ./.next/standalone/server.js
