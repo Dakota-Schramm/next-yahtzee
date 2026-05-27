@@ -2,19 +2,23 @@
 ---
 # tasks file for common
 - name: Install aptitude
+  become: true
   apt:
     name: aptitude
     state: latest
     update_cache: true
 - name: Install curl
+  become: true
   apt:
     name: curl
     state: present
 - name: Install wget
+  become: true
   apt:
     name: wget
     state: present
 - name: Install required system packages
+  become: true
   apt:
     pkg:
       - apt-transport-https
