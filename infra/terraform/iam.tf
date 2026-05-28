@@ -14,11 +14,11 @@ resource "aws_iam_user_policy_attachment" "admin_policy_attachment" {
 }
 
 # Maybe output to env file instead??
-resource "local_file" "access_key_file" {
-  filename = var.filename
+resource "local_sensitive_file" "access_key_file" {
+  filename        = var.filename
+  file_permission = "0600"
   content = <<-EOT
-    IAM User Credentials : ${aws_iam_user.fine_grained_user.name}
-    Access Key: ${aws_iam_access_key.access_key.id}
-    Secret Key: ${aws_iam_access_key.access_key.secret}
+    AWS_ACCESS_KEY_ID=${aws_iam_access_key.access_key.id}
+    AWS_SECRET_ACCESS_KEY=${aws_iam_access_key.access_key.secret}
   EOT
 }

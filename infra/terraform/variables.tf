@@ -9,5 +9,5 @@ variable "user_name" {
 variable "filename" {
   description = "The name of the file that holds IAM user credentials"
   type = string
-  default = "developer_access_account_info.txt"
+  default = "${path.module}/.env"
 }
