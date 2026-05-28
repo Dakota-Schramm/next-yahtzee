@@ -15,7 +15,7 @@ resource "aws_iam_user_policy_attachment" "admin_policy_attachment" {
 
 # Maybe output to env file instead??
 resource "local_sensitive_file" "access_key_file" {
-  filename        = var.filename
+  filename        = "${path.module}/${var.filename}"
   file_permission = "0600"
   content = <<-EOT
     AWS_ACCESS_KEY_ID=${aws_iam_access_key.access_key.id}
