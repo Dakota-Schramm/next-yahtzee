@@ -26,14 +26,14 @@ variable "vpc_cidr" {
   description = "CIDR block of the vpc"
 }
 
-variable "public_subnets_cidr" {
-  type        = list(any)
-  default     = ["10.0.0.0/20", "10.0.128.0/20"]
-  description = "CIDR block for Public Subnet"
+variable "public_subnet_cidrs" {
+  type        = list(string)
+  description = "Public Subnet CIDR values"
+  default     = ["10.0.1.0/24"]
 }
 
-variable "private_subnets_cidr" {
-  type        = list(any)
-  default     = ["10.0.16.0/20", "10.0.144.0/20"]
-  description = "CIDR block for Private Subnet"
+variable "private_subnet_cidrs" {
+  type        = list(string)
+  description = "Private Subnet CIDR values"
+  default     = ["10.0.4.0/24"]
 }
