@@ -3,6 +3,15 @@ locals {
   environment = "Yahtzee"
 }
 
+
+module "ec2" {
+  source = "./modules/ec2"
+
+  azs               = ["${local.aws_region}a"]
+  vpc_id            = module.networking.vpc_id
+  public_subnet_ids = module.networking.public_subnets
+}
+
 module "iam" {
   source = "./modules/iam"
 

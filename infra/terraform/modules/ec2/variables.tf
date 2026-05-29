@@ -13,3 +13,13 @@ variable "ec2_instance_type" {
   type        = string
   default     = "t2.micro"
 }
+
+variable "public_subnet_ids" {
+  description = "IDs of public subnet EC2 will be available in"
+  type        = string
+}
+
+variable "vpc_id" {
+  description = "ID of VPC that EC2 will be in"
+  type        = string
+}

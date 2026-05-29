@@ -20,7 +20,7 @@ resource "aws_key_pair" "ssh-key" {
 
 resource "aws_security_group" "web" {
   name   = "web-server"
-  vpc_id = aws_vpc.main.id
+  vpc_id = var.vpc_id
 
   ingress {
     description = "SSH"
@@ -49,10 +49,11 @@ resource "aws_security_group" "web" {
 resource "aws_instance" "yahtzee_app" {
   ami                         = aws_ami.ubuntu.id
   instance_type               = var.ec2_instance_type
-  availability_zone           = local.azs[0] 
   security_groups             = [aws_security_group.my_app.id]
   associate_public_ip_address = true
-  subnet_id                   = aws_subnet.my_app.id
+  count                       = length(var.azs)
+  availability_zone           = element(var.azs, count.index)
+  subnet_id                   = element(var.public_subnet_ids, count.index)
   key_name = "ssh-key"
 
   tags = {
