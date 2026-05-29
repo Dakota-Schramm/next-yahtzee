@@ -18,7 +18,7 @@ variable "aws_region" {
 }
 
 variable "environment" {
-  default = "yahtzee"
+  default = "Yahtzee"
 }
 
 variable "vpc_cidr" {
