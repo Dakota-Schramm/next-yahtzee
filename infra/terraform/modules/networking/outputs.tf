@@ -1,3 +1,8 @@
+# NOTE:
+# These aren't currently used anywhere and may need to be cleaned
+# up eventually
+
+
 output "vpc_id" {
   description = "ID of the VPC"
   value       = aws_vpc.main.id
