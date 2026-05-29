@@ -1,3 +1,5 @@
+# TODO: Look into elastic IPs
+
 locals {
   aws_region = "us-east-1"
   environment = "Yahtzee"
@@ -9,6 +11,7 @@ module "ec2" {
   azs               = ["${local.aws_region}a"]
   vpc_id            = module.networking.vpc_id
   public_subnet_ids = module.networking.public_subnets
+  ssh_public_key    = "" # TODO: Fix this
 }
 
 module "iam" {
