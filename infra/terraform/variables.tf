@@ -1,4 +1,10 @@
-# iam variables
+# NOTE:
+# These variables must be defined at root level in order to be configurable
+
+
+#############
+# IAM variables
+#############
 
 variable "user_name" {
   description = "The name for your IAM user"
@@ -12,7 +18,6 @@ variable "filename" {
   default = ".env"
 }
 
-# vpc variables
 
 variable "aws_region" {
   default = "us-east-1"
@@ -21,6 +26,10 @@ variable "aws_region" {
 variable "environment" {
   default = "Yahtzee"
 }
+
+#############
+# VPC vars
+#############
 
 variable "vpc_cidr" {
   default     = "10.0.0.0/16"
