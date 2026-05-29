@@ -12,7 +12,7 @@ resource "aws_iam_user_policy_attachment" "admin_policy_attachment" {
 }
 
 resource "local_sensitive_file" "access_key_file" {
-  filename        = "${path.root}/${var.filename}"
+  filename        = "${path.root}/${var.iam_secrets_filename}"
   file_permission = "0600"
   content = <<-EOT
     AWS_ACCESS_KEY_ID=${aws_iam_access_key.access_key.id}

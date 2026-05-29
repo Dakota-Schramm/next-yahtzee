@@ -3,7 +3,8 @@ variable "user_name" {
   type        = string
 }
 
-variable "filename" {
+variable "iam_secrets_filename" {
   description = "The name of the file that holds IAM user credentials"
   type        = string
+  default     = ".env"
 }
