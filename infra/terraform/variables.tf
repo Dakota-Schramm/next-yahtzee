@@ -37,3 +37,9 @@ variable "private_subnet_cidrs" {
   description = "Private Subnet CIDR values"
   default     = ["10.0.4.0/24"]
 }
+
+variable "azs" {
+  type        = list(string)
+  description = "Availability Zones"
+  default     = ["${var.aws_region}a"]
+}
