@@ -1,5 +1,3 @@
-# TODO: Look into elastic IPs
-
 locals {
   aws_region = "us-east-1"
   environment = "Yahtzee"

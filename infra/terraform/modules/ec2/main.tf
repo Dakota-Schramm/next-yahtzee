@@ -47,16 +47,26 @@ resource "aws_security_group" "web" {
 }
 
 resource "aws_instance" "yahtzee_app" {
-  ami                         = aws_ami.ubuntu.id
+  ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.ec2_instance_type
-  security_groups             = [aws_security_group.my_app.id]
+  vpc_security_group_ids      = [aws_security_group.web.id]
   associate_public_ip_address = true
   count                       = length(var.azs)
   availability_zone           = element(var.azs, count.index)
   subnet_id                   = element(var.public_subnet_ids, count.index)
-  key_name = "ssh-key"
+  key_name                    = "ssh-key"
 
   tags = {
     Name = "${var.environment} EC2 Instance"
+  }
+}
+
+resource "aws_eip" "app_eip" {
+  count    = length(var.azs)
+  instance = aws_instance.yahtzee_app[count.index].id
+  domain   = "vpc"
+
+  tags = {
+    Name = "${var.environment} Elastic IP"
   }
 }
