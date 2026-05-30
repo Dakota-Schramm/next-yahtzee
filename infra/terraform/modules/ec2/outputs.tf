@@ -1,7 +1,4 @@
-output "public_ip" {
-  value = aws_instance.yahtzee_app.public_ip
-}
-
-output "public_dns" {
-  value = aws_instance.yahtzee_app.public_dns
+output "elastic_ips" {
+  description = "Stable public IPs for all EC2 instances"
+  value       = aws_eip.app_eip[*].public_ip
 }
