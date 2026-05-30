@@ -16,7 +16,13 @@ variable "ec2_instance_type" {
 
 variable "public_subnet_ids" {
   description = "IDs of public subnet EC2 will be available in"
+  type        = list(string)
+}
+
+variable "environment" {
+  description = "Environment name used for resource tags"
   type        = string
+  default     = "Yahtzee"
 }
 
 variable "vpc_id" {
