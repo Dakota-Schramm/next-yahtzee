@@ -10,7 +10,7 @@ module "ec2" {
   vpc_id            = module.networking.vpc_id
   public_subnet_ids = module.networking.public_subnet_ids
   ssh_public_key    = var.ssh_public_key
-  app_ssh_ip        = var.app_ssh_ip
+  local_ssh_ip      = var.local_ssh_ip
   environment       = local.environment
 }
 

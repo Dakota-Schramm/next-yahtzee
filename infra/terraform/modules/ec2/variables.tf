@@ -1,5 +1,5 @@
-variable "app_ssh_ip" {
-  description = "Your IP for SSH access (e.g., 1.2.3.4/32)"
+variable "local_ssh_ip" {
+  description = "Your local development machine's IP for SSH access (e.g., 1.2.3.4/32)"
   type        = string
 }
 
