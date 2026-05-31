@@ -42,5 +42,8 @@ next-env.d.ts
 
 /infra/terraform/.terraform
 /infra/terraform/terraform.tfstate
+
+# dynamic files
 /infra/terraform/.env
 /infra/terraform/terraform.tfvars
+/infra/ansible/inventories/production/inventory.ini
