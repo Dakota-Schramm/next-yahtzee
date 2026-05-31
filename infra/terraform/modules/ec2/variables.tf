@@ -11,7 +11,7 @@ variable "ssh_public_key" {
 variable "ec2_instance_type" {
   description = "The AWS instance type to use"
   type        = string
-  default     = "t2.micro"
+  default     = "t3a.small"
 }
 
 variable "public_subnet_ids" {
