@@ -1,0 +1,15 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for nodejs
+- name: "Add nodejs 22.x ppa for apt repo"
+  become: true
+  shell: curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+- name: "install node"
+  become: true
+  shell: apt-get install -y nodejs
+- name: "install yarn"
+  become: true
+  shell: npm install -g yarn
+- name: "install pm2"
+  become: true
+  shell: npm install -g pm2

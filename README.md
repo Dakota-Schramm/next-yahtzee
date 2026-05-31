@@ -18,7 +18,7 @@ Dice games seem simple, but modeling 13 rounds of rolling, holding, scoring, and
 - **Complete Yahtzee ruleset** — All 13 scoring categories, 35-point upper section bonus, Yahtzee bonus stacking, and joker rules
 - **State machine over state management** — No Redux, no Zustand, no tangled `useState` chains — XState models the full game loop as explicit, deterministic transitions
 
-## Screenshots
+<!-- ## Screenshots -->
 
 <!-- TODO: Add gameplay screenshots or a demo GIF here -->
 <!-- Recommended: welcome screen, mid-game with held dice, scoring selection, game over -->
