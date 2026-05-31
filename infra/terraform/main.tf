@@ -30,3 +30,11 @@ module "networking" {
 provider "aws" {
   region = local.aws_region
 }
+
+resource "local_file" "ansible_inventory" {
+  content  = <<-INI
+    [webservers]
+    yahtzee ansible_host=${module.ec2.elastic_ips[0]} ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_ed25519
+  INI
+  filename = "${path.module}/../ansible/inventories/production/inventory.ini"
+}
