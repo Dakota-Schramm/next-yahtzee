@@ -1,0 +1,7 @@
+---
+- name: Deploy Next.js application
+  hosts: all
+  roles:
+    - common
+    - nodejs
+    - nextjs_app
