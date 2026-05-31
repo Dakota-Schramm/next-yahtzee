@@ -29,3 +29,8 @@ variable "vpc_id" {
   description = "ID of VPC that EC2 will be in"
   type        = string
 }
+
+variable "azs" {
+  description = "Availability zones to deploy subnets into"
+  type        = list(string)
+}
