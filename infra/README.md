@@ -1,5 +1,9 @@
 # Read Me
 
+This is a cloud setup for the app that has been manually tested to ensure it works.
+However, to save costs, it is not actively being used. Instead, deployment is
+set up using Github Pages.
+
 ## Ansible
 
 ### Development
@@ -32,3 +36,7 @@ ansible-playbook playbooks/webservers.yml \
   --private-key ~/.ssh/id_ed25519
 
 Then open http://<elastic-ip>/ in a browser.
+
+## Ansible
+
+1. Add key to ssh agent: `ssh-add ~/.ssh/id_ed25519`
