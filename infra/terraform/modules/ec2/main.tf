@@ -1,3 +1,4 @@
+# Register the image that will be used for this resource
 data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["099720109477"]  # Canonical
@@ -13,11 +14,14 @@ data "aws_ami" "ubuntu" {
   }
 }
 
+# Register key to allow for ssh access into EC2
 resource "aws_key_pair" "ssh-key" {
   key_name   = "ssh-key"
   public_key = var.ssh_public_key
 }
 
+# allow incoming web traffic and only our ip address for ssh
+# allow all outgoing traffic (?)
 resource "aws_security_group" "web" {
   name   = "web-server"
   vpc_id = var.vpc_id
@@ -61,6 +65,8 @@ resource "aws_instance" "yahtzee_app" {
   }
 }
 
+# register a consistent IP address for the service so restarts don't require
+# reregistering the new IP address
 resource "aws_eip" "app_eip" {
   count    = length(var.azs)
   instance = aws_instance.yahtzee_app[count.index].id
