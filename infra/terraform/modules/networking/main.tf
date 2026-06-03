@@ -1,3 +1,6 @@
+# This allows us to create a series of IPs so that
+# we can organize our resources as we see fit
+# allows for both public and private IPs
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 
@@ -36,6 +39,8 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
+# Used to allow public routing instead of keeping
+# everything private
 resource "aws_route_table" "second_rt" {
   vpc_id = aws_vpc.main.id
 
