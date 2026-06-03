@@ -1,3 +1,6 @@
+# This module is to create a new user under the root AWS account
+# with restricted permissions just for this project
+
 resource "aws_iam_user" "fine_grained_user" {
   name = var.user_name
 }
